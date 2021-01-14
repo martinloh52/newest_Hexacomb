@@ -1,0 +1,104 @@
+@font-face {
+    font-family: honeycomb;
+    src: url(../fonts/Honeycomb-Sharp.otf);
+}
+
+body {
+    background-image: url(../images/background_main.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+}
+
+.res {
+    width: 122px;
+    height: 104px;
+    float: left;
+    margin-top: 4%;
+    margin-left: 5%;
+}
+
+.res path {
+    fill: transparent;
+}
+
+.res text {
+    font-family: honeycomb;
+    font-size: 2em;
+}
+
+#logo {
+    width: 200px;
+    height: 200px;
+    margin-left: 30%;
+}
+
+ul {
+    float: right;
+    margin-right: 15%;
+    margin-top: 5%;
+    list-style-type: none;
+}
+
+li {
+    font-family: honeycomb;
+    font-weight: bold;
+    height: 80px;
+    padding-left: 42px;
+    padding-top: 40px;
+    font-size: 2.5em;
+}
+
+#yellow {
+    background: url(../images/player_1_play.png) no-repeat left;
+}
+
+#black {
+    background: url(../images/player_2_wait.png) no-repeat left;
+}
+
+#board {
+    width: 750px;
+    height: 450px;
+    margin-left: 15%;
+    margin-top: 5%;
+}
+
+#middle p {
+    float: right;
+    font-family: honeycomb;
+    font-size: 1.75em;
+    margin-top: 20%;
+}
+
+#bottom p {
+    font-family: honeycomb;
+    font-size: 1.75em;
+    margin-top: 2%;
+}
+
+#bottom p, svg {
+    display: inline;
+}
+
+#turn {
+    margin-left: 25%;
+}
+
+.rules {
+    width: 122px;
+    height: 104px;
+    float: right;
+    margin-right: 14.6%;
+    margin-top: -1.2%;
+}
+
+.rules path {
+    fill: transparent;
+}
+
+.rules text {
+    font-family: honeycomb;
+    font-size: 2.5em;
+}

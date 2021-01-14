@@ -3,6 +3,46 @@
     src: url(../fonts/Honeycomb-Sharp.otf);
 }
 
+.hex {
+    float: left;
+    margin-left: 3px;
+    margin-bottom: -26px;
+    
+}
+.hex .top {
+    width: 0;
+    border-bottom: 30px solid #6C6;
+    border-left: 52px solid transparent;
+    border-right: 52px solid transparent;
+}
+.hex .middle {
+    width: 104px;
+    height: 60px;
+    background: #6C6;
+}
+.hex .bottom {
+    width: 0;
+    border-top: 30px solid #6C6;
+    border-left: 52px solid transparent;
+    border-right: 52px solid transparent;
+}
+.hex-row {
+    clear: left;
+    position:absolute;
+}
+
+.row10{
+    top:120px;
+}
+
+.row9{
+    top:240px;
+}
+.hex-row.even {
+    margin-left: 53px;
+    position:absolute;
+}
+
 body {
     background-image: url(../images/background_main.jpg);
     background-repeat: no-repeat;
@@ -63,6 +103,7 @@ li {
     height: 450px;
     margin-left: 15%;
     margin-top: 5%;
+    position:absolute;
 }
 
 #middle p {

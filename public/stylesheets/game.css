@@ -134,3 +134,9 @@ li {
     font-family: honeycomb;
     font-size: 2.5em;
 }
+
+.game-board-divs{
+    float: left;
+    width: 1000px;
+    position:absolute;
+}

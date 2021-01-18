@@ -21,6 +21,8 @@ function doThings() {
     * and adds the position clicked to yellow's positions list. this is more 
     * a proof of concept than an actual implementation, i haven't messed with having
     * a server run this with clients yet 
+    * also checks every other position or array of positions in yellow's stones
+    * for a connection, if one is found, then the array is checked again until none are found
     */
     if(this.disabled){
         return;
@@ -42,7 +44,21 @@ function doThings() {
     let top = this.children[0]
     this.insertBefore(stone, top);
     //we want the stones to be the first children of the div
+    //the following block is temporary, just a proof of concept
+    for(let i = 0; i < yellows.length; i++){
+        for(let j = 1; j < yellows.length; j++){
 
+            if(i==j){
+                continue;
+            }
+
+            if(checkForConnectedNodes(i, j, yellows)){
+                i = 0;      //if we find a connection, the arrays checked are merged,
+                j = 1;      //which means we have to search the whole array again for
+            }               //a new connection. i'm very open to ideas on how to do this
+        }                   //more efficiently, this is a very brute force approach
+    }                       //the nice thing is, this happens per one click, so not many new
+                            //connections are possible
 }
 
 function checkForAWin(positionArray, yellow){

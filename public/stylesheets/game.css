@@ -140,3 +140,23 @@ li {
     width: 1000px;
     position:absolute;
 }
+
+.yellowStone{
+    border-radius:50%;
+    position:absolute;
+    width: 42px;
+    height: 42px;
+    background-color: rgb(211, 211, 30);
+    margin-top:8.3px;
+    margin-left:4.8px;
+}
+
+.blackStone{
+    border-radius:50%;
+    position:absolute;
+    width: 42px;
+    height: 42px;
+    background-color: rgb(0, 0, 0);
+    margin-top:8.3px;
+    margin-left:4.8px;
+}

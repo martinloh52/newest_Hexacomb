@@ -61,6 +61,7 @@ function checkForAWin(positionArray, yellow){
      * checks an array of positions to see if it is a winning position
      * @param {Array} positionArray - the array to search
      * @param {boolean} yellow - true will check if it's winning for yellow, false checks if winning for black
+     * keep in mind, yellow => winning vertically, black => winning horizontally
      */
 
     //gotta love ADS! here's the edge case:

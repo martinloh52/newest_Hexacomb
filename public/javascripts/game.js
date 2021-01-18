@@ -45,21 +45,13 @@ function doThings() {
     this.insertBefore(stone, top);
     //we want the stones to be the first children of the div
     //the following block is temporary, just a proof of concept
-    for(let i = 0; i < yellows.length; i++){
-        for(let j = 1; j < yellows.length; j++){
-
-            if(i==j){
-                continue;
-            }
-
-            if(checkForConnectedNodes(i, j, yellows)){
-                i = 0;      //if we find a connection, the arrays checked are merged,
-                j = 1;      //which means we have to search the whole array again for
-            }               //a new connection. i'm very open to ideas on how to do this
-        }                   //more efficiently, this is a very brute force approach
-    }                       //the nice thing is, this happens per one click, so not many new
-                            //connections are possible
+    if(yellows.length > 1){
+        checkAllNodesForConnection(yellows);
+    }
+    
+    
 }
+
 
 function checkForAWin(positionArray, yellow){
     /**
@@ -119,6 +111,23 @@ function checkForAWin(positionArray, yellow){
     }
 }
 
+function checkAllNodesForConnection(positionArray){
+    /**
+     * this function checks an entire array of positions for connections between 
+     * the positions in positionArray
+     * if we find a connection, we run this again
+     */
+
+     for(let i = 0; i < positionArray.length - 1; i++){
+         for(let j = i + 1; j < positionArray.length; j++){
+
+             if(checkForConnectedNodes(i, j, positionArray)){
+                 checkAllNodesForConnection(positionArray);
+             }
+         }
+     }
+}
+
 function checkForConnectedNodes(position1, position2, positionArray){
    /**
     * @param {int} position1 - first position to check (may be array of positions)
@@ -144,6 +153,10 @@ function checkForConnectedNodes(position1, position2, positionArray){
     * is the case, the arrays are joined together, put in positionArray, and then 
     * position1 and position2 are removed from the array.
     */
+
+    if(position1 == position2){
+        return false;
+    }
 
     let array1 = positionArray[position1];
     let array2 = positionArray[position2];

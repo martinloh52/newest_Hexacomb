@@ -16,4 +16,9 @@ app.get("/", function(req, res) {
 /* Pressing the 'PLAY' button, returns this page */
 app.get("/play", function(req, res) {
     res.sendFile("game.html", { root: "./public" });
-  });
+});
+
+/* Pressing the 'Rules' button, returns this page */
+app.get("/rules", function(req, res) {
+    res.sendFile("rules.html", { root: "./public" });
+});

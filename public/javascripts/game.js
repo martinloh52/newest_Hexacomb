@@ -134,6 +134,9 @@ function checkForConnectedNodes(position1, position2, positionArray){
 
     if(Array.isArray(array1[0])){        //checks if the first element of array1 is Array
         if(Array.isArray(array2[0])){    //checks if second is also Array
+            console.log("Case 1:");
+            console.log("Array 1: " + array1);
+            console.log("Array 2: " + array2); 
             //CASE ONE:
             //to get here, both array1 and array2 are arrays of positions.
             //we search for a connection, if one is found, we merge the arrays.
@@ -154,11 +157,15 @@ function checkForConnectedNodes(position1, position2, positionArray){
                              //removes the arrays from the array of positions
                         
                         positionArray.push(mergedArrays);       //add them back as a single array
+                        return true;
                     }
                 }
             }
         }
         else{
+            console.log("Case 2:");
+            console.log("Array 1: " + array1);
+            console.log("Array 2: " + array2); 
             //CASE 2:
             //to get here, array1 is an array of positions, and array2 is just one position
             for(let i = 0; i < array1.length; i++){
@@ -172,6 +179,7 @@ function checkForConnectedNodes(position1, position2, positionArray){
                     positionArray.splice(position2, 1);
 
                     positionArray.push(array1);
+                    return true;
                 }
             }
         }
@@ -179,6 +187,9 @@ function checkForConnectedNodes(position1, position2, positionArray){
     }
     else{
         if(Array.isArray(array2[0])){
+            console.log("Case 3:");
+            console.log("Array 1: " + array1);
+            console.log("Array 2: " + array2); 
             //CASE 3:
             //to get here, array1 is a position and array2 is an array of positions
             for(let i = 0; i < array2.length; i++){
@@ -189,13 +200,17 @@ function checkForConnectedNodes(position1, position2, positionArray){
                     if(position1 < position2){
                         position2--;
                     }
-
+                    
                     positionArray.splice(position2, 1);
                     positionArray.push(array2);
+                    return true;
                 }
             }
         }
         else{
+            console.log("Case 4:");
+            console.log("Array 1: " + array1);
+            console.log("Array 2: " + array2); 
             //CASE 4:
             //to get here, both array1 and array2 are just single positions
             if(areTwoNodesConnected(array1, array2)){
@@ -213,9 +228,11 @@ function checkForConnectedNodes(position1, position2, positionArray){
                 positionArray.splice(position2, 1);
 
                 positionArray.push(mergedArrays);
+                return true;
             }
         }
     }
+    return false;
 
 }
 

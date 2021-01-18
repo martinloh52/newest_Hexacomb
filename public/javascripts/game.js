@@ -47,6 +47,9 @@ function doThings() {
     //the following block is temporary, just a proof of concept
     if(yellows.length > 1){
         checkAllNodesForConnection(yellows);
+        if(checkForAWin(yellows, true)){
+            alert("Yellow just won (vertically)");
+        }
     }
     
     

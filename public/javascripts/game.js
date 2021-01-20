@@ -3,8 +3,6 @@ let rows = containerDiv.children;
 let yellows = new Array();
 let blacks = new Array();
 
-
-
 for(let i = 0; i < rows.length; i++){
     rows[i].id = "Row " + (rows.length-i);
 

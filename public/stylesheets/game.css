@@ -11,18 +11,18 @@
 }
 .hex .top {
     width: 0;
-    border-bottom: 15px solid #6C6;
+    border-bottom: 15px solid#f9ecc2;
     border-left: 26px solid transparent;
     border-right: 26px solid transparent;
 }
 .hex .middle {
     width: 52px;
     height: 30px;
-    background: #6C6;
+    background:#f9ecc2;
 }
 .hex .bottom {
     width: 0;
-    border-top: 15px solid #6C6;
+    border-top: 15px solid #f9ecc2;
     border-left: 26px solid transparent;
     border-right: 26px solid transparent;
 }
@@ -159,4 +159,29 @@ li {
     background-color: rgb(0, 0, 0);
     margin-top:8.3px;
     margin-left:4.8px;
+}
+
+.game-background{
+    background-color:#eec33d;
+    position: absolute;
+    transform: skew(-30.5deg);
+    height: 515px;
+    width: 610px;
+    margin-left: 125px; 
+}
+
+.black-bar {
+	background-color: black;
+	transform: skew(-30.5deg);
+	width: 25px;
+	height: 515px;
+	position: absolute;
+}
+
+.black-bar.one{
+    margin-left: 121px;
+}
+
+.black-bar.two{
+    margin-left: 715px;
 }

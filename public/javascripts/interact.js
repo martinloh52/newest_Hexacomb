@@ -4,17 +4,6 @@ let yellows = new Array();
 let blacks = new Array();
 let alter = 0;
 
-const socket = new WebSocket("ws://localhost:3000");
-
-socket.onmessage = function(event){
-    console.log(event.data);
-}
-
-socket.onopen = function(){
-    socket.send("Howdy from the client!");
-    console.log("Sending a message to server...");
-}
-
 
 for(let i = 0; i < rows.length; i++){
     rows[i].id = "Row " + (rows.length-i);
@@ -334,3 +323,18 @@ function areTwoNodesConnected(position1, position2){
     }
     return false;
 }
+
+(function setup() {
+    var socket = new WebSocket(Setup.WEB_SOCKET_URL);
+  
+    socket.onmessage = function (event) {
+        let incomingMsg = JSON.parse(event.data);
+        
+    };
+  
+    socket.onopen = function () {
+        socket.send("{}");
+    };
+  
+    socket.onerror = function () { };
+})();

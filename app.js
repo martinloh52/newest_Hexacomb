@@ -67,21 +67,27 @@ wss.on("connection", function connection(ws) {
           /*
            * player A can place a stone
            */
-          if (oMsg.type == messages.T_TARGET_WORD) {
-            gameObj.setWord(oMsg.data);
+          if (oMsg.type == messages.T_STONE_PLACED) {
+            gameObj.placeStone(true);
     
             if (gameObj.hasTwoConnectedPlayers()) {
-              gameObj.playerB.send(message);
+                gameObj.playerB.send(message);
+                gameObj.setStatus("STONE PLACED");
             }
+          }
+          if (oMsg.type == messages.T_GAME_WON_BY) {
+            gameObj.setStatus(oMsg.data);
+            //game was won by somebody, update statistics
+            gameStatus.gamesCompleted++;
           }
         } else {
           /*
-           * player B can make a guess;
-           * this guess is forwarded to A
+           * player B can place a stone
            */
-          if (oMsg.type == messages.T_MAKE_A_GUESS) {
+          if (oMsg.type == messages.T_STONE_PLACED) {
+            gameObj.placeStone(false);
             gameObj.playerA.send(message);
-            gameObj.setStatus("CHAR GUESSED");
+            gameObj.setStatus("STONE PLACED");
           }
     
           /*

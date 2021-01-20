@@ -2,6 +2,7 @@ var game = function(gameID) {
     this.playerA = null;
     this.playerB = null;
     this.id = gameID;
+    this.stonePlaced = null;
     this.gameState = "0 JOINT"; //"A" means A won, "B" means B won, "ABORTED" means the game was aborted
 };
 
@@ -92,6 +93,25 @@ game.prototype.setStatus = function(w) {
       );
     }
 };
+
+game.prototype.placeStone = function(yellow){
+    console.assert(
+        typeof yellow == "boolean",
+        "%s: Expecting a boolean, got a %s",
+        arguments.callee.name,
+        typeof yellow
+    );
+    
+      //two possible options for the current game state:
+      //1 JOINT, 2 JOINT
+    if (this.gameState != "1 JOINT" && this.gameState != "2 JOINT") {
+        return new Error(
+          "Trying to set word, but game status is %s",
+          this.gameState
+        );
+    }
+    this.stonePlaced = yellow;
+}
 
 game.prototype.hasTwoConnectedPlayers = function() {
     return this.gameState == "2 JOINT";

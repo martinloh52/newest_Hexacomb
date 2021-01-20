@@ -4,6 +4,17 @@ let yellows = new Array();
 let blacks = new Array();
 let alter = 0;
 
+const socket = new WebSocket("ws://localhost:3000");
+
+socket.onmessage = function(event){
+    console.log(event.data);
+}
+
+socket.onopen = function(){
+    socket.send("Howdy from the client!");
+    console.log("Sending a message to server...");
+}
+
 
 for(let i = 0; i < rows.length; i++){
     rows[i].id = "Row " + (rows.length-i);
@@ -84,7 +95,6 @@ function toggleAll(state){
                             //the inverse of state so that true makes all elements enabled
 
      for(let i = 0; i < rows.length; i++){
-         console.log("we're doing row " + i);
          let rowChildren = rows[i].children;
          for(let j = 0; j < rowChildren.length; j++){
              if(rowChildren[j].firstChild.className === "top"){   //checks whether or not there is a stone in this hexagon

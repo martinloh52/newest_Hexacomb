@@ -73,6 +73,28 @@ function doThings() {
     }   
 }
 
+function toggleAll(state){
+    /**
+     * @param {boolean} state - true means enable all valid hexagons, false means disable all
+     * toggles all hexagons that should be able to be clicked between
+     * enabled and disabled
+     */
+     
+     state = !state;        //HTMLElement.disabled = true makes an element disabled, so we want
+                            //the inverse of state so that true makes all elements enabled
+
+     for(let i = 0; i < rows.length; i++){
+         console.log("we're doing row " + i);
+         let rowChildren = rows[i].children;
+         for(let j = 0; j < rowChildren.length; j++){
+             if(rowChildren[j].firstChild.className === "top"){   //checks whether or not there is a stone in this hexagon
+                rowChildren[j].disabled = state;                  //stones are always inserted as the first child of a .hex div
+            }
+        }
+     }
+
+}
+
 function checkForAWin(positionArray, yellow){
     /**
      * checks an array of positions to see if it is a winning position

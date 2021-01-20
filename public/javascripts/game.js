@@ -2,6 +2,8 @@ let containerDiv = document.querySelector(".game-board-divs");
 let rows = containerDiv.children;
 let yellows = new Array();
 let blacks = new Array();
+let alter = 0;
+
 
 for(let i = 0; i < rows.length; i++){
     rows[i].id = "Row " + (rows.length-i);
@@ -27,32 +29,49 @@ function doThings() {
     }
     console.log("My ID is " + this.id + ". I will now disable :)");
     this.disabled = true;
+    
+    if (alter%2 === 0) {
+        let stone = document.createElement("div");
+        stone.className = "yellowStone";
 
-    let stone = document.createElement("div");
-    stone.className = "yellowStone";
+        let position = this.id.split(",") 
+        /*splits the id (which is in the format "x,y") by the comma
+        into an array, where position[0] = x and position[1] = y.
+        this is how we keep track of the stones on the board.*/
 
-    let position = this.id.split(",") 
-    /*splits the id (which is in the format "x,y") by the comma
-    into an array, where position[0] = x and position[1] = y.
-    this is how we keep track of the stones on the board.*/
+        yellows.push(position);
 
-
-    yellows.push(position);
-
-    let top = this.children[0]
-    this.insertBefore(stone, top);
-    //we want the stones to be the first children of the div
-    //the following block is temporary, just a proof of concept
-    if(yellows.length > 1){
-        checkAllNodesForConnection(yellows);
-        if(checkForAWin(yellows, true)){
-            alert("Yellow just won (vertically)");
+        let top = this.children[0]
+        this.insertBefore(stone, top);
+        //we want the stones to be the first children of the div
+        //the following block is temporary, just a proof of concept
+        if(yellows.length > 1){
+            checkAllNodesForConnection(yellows);
+            if(checkForAWin(yellows, true)){
+                alert("Yellow just won (vertically)");
+            }
         }
-    }
-    
-    
-}
+        alter++;
+    }  
+    else {
+        let stone = document.createElement("div");
+        stone.className = "blackStone";
 
+        let position = this.id.split(",") 
+
+        blacks.push(position);
+
+        let top = this.children[0]
+        this.insertBefore(stone, top);
+        if(blacks.length > 1){
+            checkAllNodesForConnection(blacks);
+            if(checkForAWin(blacks, false)){
+                alert("Black just won (horizontally)");
+            }
+        }
+        alter++;
+    }   
+}
 
 function checkForAWin(positionArray, yellow){
     /**
@@ -70,7 +89,7 @@ function checkForAWin(positionArray, yellow){
     let xy = 0;         //should we check x or y coordinates of an [x,y] pair?
                         //0 cooresponds to black, 1 for y
     if(yellow){         //if we're checking for a yellow win, we want
-        xy = 1;         //to check for the y-coordinate, which is at 
+        xy = 1;       //to check for the y-coordinate, which is at 
     }                   //index 1 in the [x,y] style, so xy is set to 1
     
     for (let i = 0; i < positionArray.length; i++) {        //loop over the array of positions
@@ -105,11 +124,7 @@ function checkForAWin(positionArray, yellow){
                                                //then we found a winning array
                 }
             }
-
-        
-        
         }
-
     }
 }
 
@@ -264,7 +279,6 @@ function checkForConnectedNodes(position1, position2, positionArray){
         }
     }
     return false;
-
 }
 
 function areTwoNodesConnected(position1, position2){

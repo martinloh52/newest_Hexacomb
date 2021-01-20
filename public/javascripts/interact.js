@@ -329,6 +329,7 @@ function areTwoNodesConnected(position1, position2){
   
     socket.onmessage = function (event) {
         let incomingMsg = JSON.parse(event.data);
+
         
     };
   

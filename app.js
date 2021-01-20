@@ -2,6 +2,11 @@ var express = require("express");
 var http = require("http");
 const websocket = require("ws");
 
+var messages = require("./public/javascripts/messages");
+
+var gameStatus = require("./statTracker");
+var Game = require("./game");
+
 var port = process.argv[2];
 var app = express();
 
@@ -27,6 +32,9 @@ app.get("/rules", function(req, res) {
 
 /*Sets up a websocket for the server*/
 const wss = new websocket.Server({ server });
+
+var currentGame = new Game(gameStatus.gamesInitialized++);
+var connectionID = 0; //each websocket receives a unique ID
 
 
 /* when a connection is made, wait 2000 ms and then send message*/
@@ -127,4 +135,3 @@ wss.on("connection", function connection(ws) {
 });
 
 server.listen(port);
-

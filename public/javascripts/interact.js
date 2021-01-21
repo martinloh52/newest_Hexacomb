@@ -2,6 +2,9 @@
 function GameState(socket, board){
     this.playerType = null;  
 
+    this.yellows = new Array();
+    this.blacks = new Array();
+
     this.getPlayerType = function () {
         return this.playerType;
     };
@@ -24,7 +27,19 @@ function GameState(socket, board){
                 console.log(buttonsInRow);
                 let idNew = (j + 1) + "," + (rows.length-i);
                 buttonsInRow[j].id = idNew;
-                buttonsInRow[j].addEventListener("click", this.updateGame(this.getPlayerType(), idNew));
+            }
+        }
+    }
+
+    this.addEventListeners = function(){
+        for(let i = 0; i < this.rows.length; i++){
+            let row = this.rows[i].children;
+            for(let j = 0; j < this.rows.length; j++){
+                let hex = row[j];
+                let gameState = this;
+                hex.addEventListener("click", function() {
+                    gameState.updateGame(this.playerType, hex.id)
+                });
             }
         }
     }
@@ -37,7 +52,7 @@ function GameState(socket, board){
         */
         player = pt;
 
-        let hexagonClicked = document.querySelector(id);
+        let hexagonClicked = document.getElementById(id);
         if(hexagonClicked.disabled){
             return;
         }
@@ -53,24 +68,24 @@ function GameState(socket, board){
             into an array, where position[0] = x and position[1] = y.
             this is how we keep track of the stones on the board.*/
 
-            yellows.push(position);
+            this.yellows.push(position);
 
-            let top = this.children[0]
-            this.insertBefore(stone, top);
+            let top = hexagonClicked.children[0]
+            hexagonClicked.insertBefore(stone, top);
             //we want the stones to be the first children of the div
             //the following block is temporary, just a proof of concept
-            if(yellows.length > 1){
-                checkAllNodesForConnection(yellows);
-                if(checkForAWin(yellows, true)){
+            if(this.yellows.length > 1){
+                checkAllNodesForConnection(this.yellows);
+                if(checkForAWin(this.yellows, true)){
                     let finalMsg = Messages.O_GAME_WON_BY;
                     finalMsg.data = "A";
                     socket.send(JSON.stringify(finalMsg));
-                    toggleAll(false);
+                    this.toggleAll(false);
                     socket.close();
-                    toggleAll(false);
+                    this.toggleAll(false);
                 }
             }
-            toggleAll(false);
+            this.toggleAll(false);
             var outgoingMsg = Messages.O_STONE_PLACED;
             outgoingMsg.data = "A";
             socket.send(JSON.stringify(outgoingMsg));
@@ -81,47 +96,47 @@ function GameState(socket, board){
 
             let position = id.split(",") 
 
-            blacks.push(position);
+            this.blacks.push(position);
 
-            let top = this.children[0]
-            this.insertBefore(stone, top);
-            if(blacks.length > 1){
-                checkAllNodesForConnection(blacks);
-                if(checkForAWin(blacks, false)){
+            let top = hexagonClicked.children[0]
+            hexagonClicked.insertBefore(stone, top);
+            if(this.blacks.length > 1){
+                checkAllNodesForConnection(this.blacks);
+                if(checkForAWin(this.blacks, false)){
                     let finalMsg = Messages.O_GAME_WON_BY;
                     finalMsg.data = "B";
                     socket.send(JSON.stringify(finalMsg));
-                    toggleAll(false);
+                    this.toggleAll(false);
                     socket.close();
                 }
             }
-            toggleAll(false);
+            this.toggleAll(false);
             var outgoingMsg = Messages.O_STONE_PLACED;
             outgoingMsg.data = "B";
             socket.send(JSON.stringify(outgoingMsg));
         }   
     }
-}
 
-function toggleAll(state){
-    /**
-     * @param {boolean} state - true means enable all valid hexagons, false means disable all
-     * toggles all hexagons that should be able to be clicked between
-     * enabled and disabled
-     */
-     
-     state = !state;        //HTMLElement.disabled = true makes an element disabled, so we want
-                            //the inverse of state so that true makes all elements enabled
-
-     for(let i = 0; i < rows.length; i++){
-         let rowChildren = rows[i].children;
-         for(let j = 0; j < rowChildren.length; j++){
-             if(rowChildren[j].firstChild.className === "top"){   //checks whether or not there is a stone in this hexagon
-                rowChildren[j].disabled = state;                  //stones are always inserted as the first child of a .hex div
+    this.toggleAll = function (state){
+        /**
+         * @param {boolean} state - true means enable all valid hexagons, false means disable all
+         * toggles all hexagons that should be able to be clicked between
+         * enabled and disabled
+         */
+         
+         state = !state;        //HTMLElement.disabled = true makes an element disabled, so we want
+                                //the inverse of state so that true makes all elements enabled
+         let rows = this.rows;
+         for(let i = 0; i < rows.length; i++){
+             let rowChildren = rows[i].children;
+             for(let j = 0; j < rowChildren.length; j++){
+                 if(rowChildren[j].firstChild.className === "top"){   //checks whether or not there is a stone in this hexagon
+                    rowChildren[j].disabled = state;                  //stones are always inserted as the first child of a .hex div
+                }
             }
-        }
-     }
-
+         }
+    
+    }
 }
 
 function checkForAWin(positionArray, yellow){
@@ -367,21 +382,22 @@ function areTwoNodesConnected(position1, position2){
 
         if (incomingMsg.type == Messages.T_PLAYER_TYPE) {
             gs.setPlayerType(incomingMsg.data);
-
+            gs.addEventListeners();
+            gs.toggleAll(false);
             if (gs.getPlayerType() == "A") {
-                toggleAll(true);
+                gs.toggleAll(true);
                 
             }
         }
 
         if (gs.getPlayerType == "B" && incomingMsg.type == Messages.T_STONE_PLACED) {
-            toggleAll(true);
+            gs.toggleAll(true);
         }
         
         if (incomingMsg.type == Messages.T_STONE_PLACED) {
             if (gs.getPlayerType == "A") {gs.setPlayerType("B")}
             else {gs.setPlayerType("A")}
-            toggleAll(true);
+            gs.toggleAll(true);
             
         }
     };

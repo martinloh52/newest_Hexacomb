@@ -1,9 +1,5 @@
-let containerDiv = document.querySelector(".game-board-divs");
-let rows = containerDiv.children;
-let yellows = new Array();
-let blacks = new Array();
 
-function GameState(socket){
+function GameState(socket, board){
     this.playerType = null;  
 
     this.getPlayerType = function () {
@@ -14,6 +10,25 @@ function GameState(socket){
         return this.playerType = p;
     }
 
+    this.board = board;
+
+    this.rows = board.children;
+
+    this.initialize = function(){
+        let rows = this.rows;
+        console.log(rows);
+        for(var i = 0; i < rows.length; i++){
+            rows[i].id = "Row " + (rows.length-i);
+            let buttonsInRow = rows[i].children;
+            for(var j = 0; j < buttonsInRow.length; j++){
+                console.log(buttonsInRow);
+                let idNew = (j + 1) + "," + (rows.length-i);
+                buttonsInRow[j].id = idNew;
+                buttonsInRow[j].addEventListener("click", this.updateGame(this.getPlayerType(), idNew));
+            }
+        }
+    }
+
     this.updateGame = function(pt, id) {
         /*puts a yellow or black stone alternating each turn, disables the div's event listener,
         * and adds the position clicked to yellow's/black's positions list.
@@ -22,7 +37,7 @@ function GameState(socket){
         */
         player = pt;
 
-        let hexagonClicked = document.querySelector("#" + id);
+        let hexagonClicked = document.querySelector(id);
         if(hexagonClicked.disabled){
             return;
         }
@@ -85,15 +100,6 @@ function GameState(socket){
             outgoingMsg.data = "B";
             socket.send(JSON.stringify(outgoingMsg));
         }   
-    }
-
-    for(let i = 0; i < rows.length; i++){
-        rows[i].id = "Row " + (rows.length-i);
-        let buttonsInRow = rows[i].children;
-        for(let j = 0; j < buttonsInRow.length; j++){
-            buttonsInRow[j].id = j + 1 + "," + (rows.length-i);
-            buttonsInRow[j].addEventListener("click", GameState.updateGame(GameState.getPlayerType(), buttonsInRow[j].id));
-        }
     }
 }
 
@@ -352,7 +358,9 @@ function areTwoNodesConnected(position1, position2){
 (function setup() {
     var socket = new WebSocket("ws://localhost:3000");
 
-    var gs = new GameState(socket);
+    let board = document.querySelector(".game-board-divs");
+    var gs = new GameState(socket, board);
+    gs.initialize();
   
     socket.onmessage = function (event) {
         let incomingMsg = JSON.parse(event.data);

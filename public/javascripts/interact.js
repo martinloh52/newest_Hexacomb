@@ -17,11 +17,9 @@ for(let i = 0; i < rows.length; i++){
 }
 
 function doThings() {
-    /*for now, puts a yellow stone every time, disables the div's event listener,
-    * and adds the position clicked to yellow's positions list. this is more 
-    * a proof of concept than an actual implementation, i haven't messed with having
-    * a server run this with clients yet 
-    * also checks every other position or array of positions in yellow's stones
+    /*puts a yellow or black stone alternating each turn, disables the div's event listener,
+    * and adds the position clicked to yellow's/black's positions list.
+    * also checks every other position or array of positions in yellow's/black's stones
     * for a connection, if one is found, then the array is checked again until none are found
     */
     if(this.disabled){
@@ -49,6 +47,7 @@ function doThings() {
             checkAllNodesForConnection(yellows);
             if(checkForAWin(yellows, true)){
                 alert("Yellow just won (vertically)");
+                toggleAll(false);
             }
         }
         alter++;
@@ -67,6 +66,7 @@ function doThings() {
             checkAllNodesForConnection(blacks);
             if(checkForAWin(blacks, false)){
                 alert("Black just won (horizontally)");
+                toggleAll(false);
             }
         }
         alter++;

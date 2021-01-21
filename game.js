@@ -114,7 +114,7 @@ game.prototype.placeStone = function(yellow){
 }
 
 game.prototype.hasTwoConnectedPlayers = function() {
-    return this.gameState == "2 JOINT";
+    return this.gameState == "2 JOINT" || this.gameState == "STONE PLACED";
 };
 
 game.prototype.addPlayer = function(p) {

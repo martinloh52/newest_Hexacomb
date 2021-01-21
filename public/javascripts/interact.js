@@ -18,12 +18,10 @@ function GameState(socket, board){
 
     this.initialize = function(){
         let rows = this.rows;
-        console.log(rows);
         for(var i = 0; i < rows.length; i++){
             rows[i].id = "Row " + (rows.length-i);
             let buttonsInRow = rows[i].children;
             for(var j = 0; j < buttonsInRow.length; j++){
-                console.log(buttonsInRow);
                 let idNew = (j + 1) + "," + (rows.length-i);
                 buttonsInRow[j].id = idNew;
             }
@@ -37,19 +35,20 @@ function GameState(socket, board){
                 let hex = row[j];
                 let gameState = this;
                 hex.addEventListener("click", function() {
-                    gameState.updateGame(hex.id)
+                    gameState.updateGame(hex.id, gameState.getPlayerType())
                 });
             }
         }
     }
 
-    this.updateGame = function(id) {
+    this.updateGame = function(id, pushedPlayerType) {
         /*puts a yellow or black stone alternating each turn, disables the div's event listener,
         * and adds the position clicked to yellow's/black's positions list.
         * also checks every other position or array of positions in yellow's/black's stones
         * for a connection, if one is found, then the array is checked again until none are found
         */
-        console.log("Player type is: " + this.getPlayerType());
+        console.log("The player who pushed: " + pushedPlayerType);
+        console.log("I happen to be player " + this.playerType);
         let hexagonClicked = document.getElementById(id);
         if(hexagonClicked.disabled){
             return;
@@ -57,7 +56,7 @@ function GameState(socket, board){
         console.log("My ID is " + id + ". I will now disable :)");
         hexagonClicked.disabled = true;
         
-        if (this.getPlayerType() === "A") {
+        if (pushedPlayerType === "A") {
             let stone = document.createElement("div");
             stone.className = "yellowStone";
 
@@ -72,21 +71,35 @@ function GameState(socket, board){
             hexagonClicked.insertBefore(stone, top);
             //we want the stones to be the first children of the div
             //the following block is temporary, just a proof of concept
-            if(this.yellows.length > 1){
-                checkAllNodesForConnection(this.yellows);
-                if(checkForAWin(this.yellows, true)){
-                    let finalMsg = Messages.O_GAME_WON_BY;
-                    finalMsg.data = "A";
-                    socket.send(JSON.stringify(finalMsg));
-                    this.toggleAll(false);
-                    socket.close();
-                    this.toggleAll(false);
+            if(this.playerType == pushedPlayerType){
+                if(this.yellows.length > 1){
+                    checkAllNodesForConnection(this.yellows);
+                    if(checkForAWin(this.yellows, true)){
+
+                        //still gotta send the move to black, lol get rekt
+                        this.toggleAll(false);
+                        var outgoingMsg = Messages.O_STONE_PLACED;
+                        outgoingMsg.data = "A";
+                        outgoingMsg.position = id;
+                        socket.send(JSON.stringify(outgoingMsg));
+
+                        let finalMsg = Messages.O_GAME_WON_BY;
+                        finalMsg.data = "A";
+                        socket.send(JSON.stringify(finalMsg));
+                        this.toggleAll(false);
+
+                        socket.close();
+                        this.toggleAll(false);
+                    }
                 }
+                
+                this.toggleAll(false);
+                var outgoingMsg = Messages.O_STONE_PLACED;
+                outgoingMsg.data = "A";
+                outgoingMsg.position = id;
+                socket.send(JSON.stringify(outgoingMsg));
             }
-            this.toggleAll(false);
-            var outgoingMsg = Messages.O_STONE_PLACED;
-            outgoingMsg.data = "A";
-            socket.send(JSON.stringify(outgoingMsg));
+
         }  
         else {
             let stone = document.createElement("div");
@@ -98,20 +111,35 @@ function GameState(socket, board){
 
             let top = hexagonClicked.children[0]
             hexagonClicked.insertBefore(stone, top);
-            if(this.blacks.length > 1){
-                checkAllNodesForConnection(this.blacks);
-                if(checkForAWin(this.blacks, false)){
-                    let finalMsg = Messages.O_GAME_WON_BY;
-                    finalMsg.data = "B";
-                    socket.send(JSON.stringify(finalMsg));
-                    this.toggleAll(false);
-                    socket.close();
+            if(this.playerType == pushedPlayerType){
+                if(this.blacks.length > 1){
+                    checkAllNodesForConnection(this.blacks);
+                    if(checkForAWin(this.blacks, false)){
+
+                        //still gotta send the message to yellow, lol get rekt
+                        this.toggleAll(false);
+                        var outgoingMsg = Messages.O_STONE_PLACED;
+                        outgoingMsg.data = "B";
+                        outgoingMsg.position = id;
+                        socket.send(JSON.stringify(outgoingMsg));
+
+
+                        let finalMsg = Messages.O_GAME_WON_BY;
+                        finalMsg.data = "B";
+                        socket.send(JSON.stringify(finalMsg));
+                        this.toggleAll(false);        
+                        socket.close();
+                    }
                 }
+
+                this.toggleAll(false);
+                var outgoingMsg = Messages.O_STONE_PLACED;
+                outgoingMsg.data = "B";
+                outgoingMsg.position = id;
+                socket.send(JSON.stringify(outgoingMsg));
+
             }
-            this.toggleAll(false);
-            var outgoingMsg = Messages.O_STONE_PLACED;
-            outgoingMsg.data = "B";
-            socket.send(JSON.stringify(outgoingMsg));
+
         }   
     }
 
@@ -377,6 +405,7 @@ function areTwoNodesConnected(position1, position2){
   
     socket.onmessage = function (event) {
         let incomingMsg = JSON.parse(event.data);
+        console.log(incomingMsg);
 
         if (incomingMsg.type == Messages.T_PLAYER_TYPE) {
             gs.setPlayerType(incomingMsg.data);
@@ -393,6 +422,8 @@ function areTwoNodesConnected(position1, position2){
         
         if (incomingMsg.type == Messages.T_STONE_PLACED) {
             gs.toggleAll(true);
+            let otherPlayer = gs.getPlayerType() == "A" ? "B" : "A"; 
+            gs.updateGame(incomingMsg.position, otherPlayer);
         }
     };
   

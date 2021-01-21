@@ -13,33 +13,51 @@ function GameState(socket, board){
     }
 
     this.board = board;
+
     this.rows = board.children;
-    this.yellows = new Array();
-    this.blacks = new Array();
 
     this.initialize = function(){
-        var elements = document.querySelectorAll(".hex");
-        Array.from(elements).forEach(function (el) {
-            el.addEventListener("click", function singleClick(e){
-                var clickedHex = e.target.id;
-
-                console.log("My ID is " + clickedHex + ". I will now disable :)");
-                
-                el.removeEventListener("click", singleClick, false);
-                this.updateGame(this.playerType, clickedHex);
-            })
-        })
+        let rows = this.rows;
+        console.log(rows);
+        for(var i = 0; i < rows.length; i++){
+            rows[i].id = "Row " + (rows.length-i);
+            let buttonsInRow = rows[i].children;
+            for(var j = 0; j < buttonsInRow.length; j++){
+                console.log(buttonsInRow);
+                let idNew = (j + 1) + "," + (rows.length-i);
+                buttonsInRow[j].id = idNew;
+            }
+        }
     }
 
-    this.updateGame = function(pt, id) {
+    this.addEventListeners = function(){
+        for(let i = 0; i < this.rows.length; i++){
+            let row = this.rows[i].children;
+            for(let j = 0; j < this.rows.length; j++){
+                let hex = row[j];
+                let gameState = this;
+                hex.addEventListener("click", function() {
+                    gameState.updateGame(hex.id)
+                });
+            }
+        }
+    }
+
+    this.updateGame = function(id) {
         /*puts a yellow or black stone alternating each turn, disables the div's event listener,
         * and adds the position clicked to yellow's/black's positions list.
         * also checks every other position or array of positions in yellow's/black's stones
         * for a connection, if one is found, then the array is checked again until none are found
         */
-        player = pt;
+        console.log("Player type is: " + this.getPlayerType());
+        let hexagonClicked = document.getElementById(id);
+        if(hexagonClicked.disabled){
+            return;
+        }
+        console.log("My ID is " + id + ". I will now disable :)");
+        hexagonClicked.disabled = true;
         
-        if (player === "A") {
+        if (this.getPlayerType() === "A") {
             let stone = document.createElement("div");
             stone.className = "yellowStone";
 
@@ -78,8 +96,8 @@ function GameState(socket, board){
 
             this.blacks.push(position);
 
-            let top = this.children[0]
-            this.insertBefore(stone, top);
+            let top = hexagonClicked.children[0]
+            hexagonClicked.insertBefore(stone, top);
             if(this.blacks.length > 1){
                 checkAllNodesForConnection(this.blacks);
                 if(checkForAWin(this.blacks, false)){
@@ -96,7 +114,6 @@ function GameState(socket, board){
             socket.send(JSON.stringify(outgoingMsg));
         }   
     }
-}
 
     this.toggleAll = function (state){
         /**
@@ -367,19 +384,15 @@ function areTwoNodesConnected(position1, position2){
             gs.toggleAll(false);
             if (gs.getPlayerType() == "A") {
                 gs.toggleAll(true);
-                
             }
         }
-
+        /*
         if (gs.getPlayerType == "B" && incomingMsg.type == Messages.T_STONE_PLACED) {
             gs.toggleAll(true);
-        }
+        } */
         
         if (incomingMsg.type == Messages.T_STONE_PLACED) {
-            if (gs.getPlayerType == "A") {gs.setPlayerType("B")}
-            else {gs.setPlayerType("A")}
             gs.toggleAll(true);
-            
         }
     };
   

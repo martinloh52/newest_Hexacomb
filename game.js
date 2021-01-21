@@ -106,7 +106,7 @@ game.prototype.placeStone = function(yellow){
       //1 JOINT, 2 JOINT
     if (this.gameState != "1 JOINT" && this.gameState != "2 JOINT") {
         return new Error(
-          "Trying to set word, but game status is %s",
+          "Trying to place stone, but game status is %s",
           this.gameState
         );
     }

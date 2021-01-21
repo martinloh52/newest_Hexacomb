@@ -84,6 +84,7 @@ wss.on("connection", function connection(ws) {
             if (gameObj.hasTwoConnectedPlayers()) {
                 gameObj.playerB.send(message);
                 gameObj.setStatus("STONE PLACED");
+                console.log("Stone placed, waiting for player B...");
             }
           }
 
@@ -103,6 +104,7 @@ wss.on("connection", function connection(ws) {
             gameObj.placeStone(false);
             gameObj.playerA.send(message);
             gameObj.setStatus("STONE PLACED");
+            console.log("Stone placed, waiting for player A...");
           }
     
           /*

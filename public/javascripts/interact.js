@@ -47,7 +47,11 @@ function GameState(socket){
             if(yellows.length > 1){
                 checkAllNodesForConnection(yellows);
                 if(checkForAWin(yellows, true)){
-                    alert("Yellow just won (vertically)");
+                    let finalMsg = Messages.O_GAME_WON_BY;
+                    finalMsg.data = "A";
+                    socket.send(JSON.stringify(finalMsg));
+                    toggleAll(false);
+                    socket.close();
                     toggleAll(false);
                 }
             }
@@ -69,8 +73,11 @@ function GameState(socket){
             if(blacks.length > 1){
                 checkAllNodesForConnection(blacks);
                 if(checkForAWin(blacks, false)){
-                    alert("Black just won (horizontally)");
+                    let finalMsg = Messages.O_GAME_WON_BY;
+                    finalMsg.data = "B";
+                    socket.send(JSON.stringify(finalMsg));
                     toggleAll(false);
+                    socket.close();
                 }
             }
             toggleAll(false);

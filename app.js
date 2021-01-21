@@ -31,7 +31,10 @@ app.get("/rules", function(req, res) {
 /*Sets up a websocket for the server*/
 const server = http.createServer(app);
 const wss = new websocket.Server({ server });
+<<<<<<< HEAD
 
+=======
+>>>>>>> 25f00d74f5ae72179e9fe9f38cf1f9eb7a709b15
 
 var websockets = {}; //property: websocket, value: game
 

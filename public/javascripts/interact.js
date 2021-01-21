@@ -92,7 +92,7 @@ function GameState(socket){
         let buttonsInRow = rows[i].children;
         for(let j = 0; j < buttonsInRow.length; j++){
             buttonsInRow[j].id = j + 1 + "," + (rows.length-i);
-            buttonsInRow[j].addEventListener("click", GameState.updateGame(GameState.getPlayerType(), buttonsInRow[j].id));
+            buttonsInRow[j].addEventListener("click", this.updateGame(this.getPlayerType(), buttonsInRow[j].id));
         }
     }
 }

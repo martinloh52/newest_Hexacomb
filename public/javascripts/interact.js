@@ -1,9 +1,4 @@
-let containerDiv = document.querySelector(".game-board-divs");
-let rows = containerDiv.children;
-let yellows = new Array();
-let blacks = new Array();
-
-function GameState(socket){
+function GameState(socket, board){
     this.playerType = null;  
 
     this.getPlayerType = function () {
@@ -14,6 +9,25 @@ function GameState(socket){
         return this.playerType = p;
     }
 
+    this.board = board;
+    this.rows = board.children;
+    this.yellows = new Array();
+    this.blacks = new Array();
+
+    this.initialize = function(){
+        var elements = document.querySelectorAll(".hex");
+        Array.from(elements).forEach(function (el) {
+            el.addEventListener("click", function singleClick(e){
+                var clickedHex = e.target.id;
+
+                console.log("My ID is " + clickedHex + ". I will now disable :)");
+                
+                el.removeEventListener("click", singleClick, false);
+                this.updateGame(this.playerType, clickedHex);
+            })
+        })
+    }
+
     this.updateGame = function(pt, id) {
         /*puts a yellow or black stone alternating each turn, disables the div's event listener,
         * and adds the position clicked to yellow's/black's positions list.
@@ -21,13 +35,6 @@ function GameState(socket){
         * for a connection, if one is found, then the array is checked again until none are found
         */
         player = pt;
-
-        let hexagonClicked = document.querySelector("#" + id);
-        if(hexagonClicked.disabled){
-            return;
-        }
-        console.log("My ID is " + id + ". I will now disable :)");
-        hexagonClicked.disabled = true;
         
         if (player === "A") {
             let stone = document.createElement("div");
@@ -38,15 +45,15 @@ function GameState(socket){
             into an array, where position[0] = x and position[1] = y.
             this is how we keep track of the stones on the board.*/
 
-            yellows.push(position);
+            this.yellows.push(position);
 
             let top = this.children[0]
             this.insertBefore(stone, top);
             //we want the stones to be the first children of the div
             //the following block is temporary, just a proof of concept
-            if(yellows.length > 1){
-                checkAllNodesForConnection(yellows);
-                if(checkForAWin(yellows, true)){
+            if(this.yellows.length > 1){
+                checkAllNodesForConnection(this.yellows);
+                if(checkForAWin(this.yellows, true)){
                     let finalMsg = Messages.O_GAME_WON_BY;
                     finalMsg.data = "A";
                     socket.send(JSON.stringify(finalMsg));
@@ -66,13 +73,13 @@ function GameState(socket){
 
             let position = id.split(",") 
 
-            blacks.push(position);
+            this.blacks.push(position);
 
             let top = this.children[0]
             this.insertBefore(stone, top);
-            if(blacks.length > 1){
-                checkAllNodesForConnection(blacks);
-                if(checkForAWin(blacks, false)){
+            if(this.blacks.length > 1){
+                checkAllNodesForConnection(this.blacks);
+                if(checkForAWin(this.blacks, false)){
                     let finalMsg = Messages.O_GAME_WON_BY;
                     finalMsg.data = "B";
                     socket.send(JSON.stringify(finalMsg));
@@ -85,15 +92,6 @@ function GameState(socket){
             outgoingMsg.data = "B";
             socket.send(JSON.stringify(outgoingMsg));
         }   
-    }
-
-    for(let i = 0; i < rows.length; i++){
-        rows[i].id = "Row " + (rows.length-i);
-        let buttonsInRow = rows[i].children;
-        for(let j = 0; j < buttonsInRow.length; j++){
-            buttonsInRow[j].id = j + 1 + "," + (rows.length-i);
-            buttonsInRow[j].addEventListener("click", this.updateGame(this.getPlayerType(), buttonsInRow[j].id));
-        }
     }
 }
 
@@ -352,7 +350,9 @@ function areTwoNodesConnected(position1, position2){
 (function setup() {
     var socket = new WebSocket("ws://localhost:3000");
 
-    var gs = new GameState(socket);
+    let board = document.querySelector(".game-board-divs");
+    var gs = new GameState(socket, board);
+    gs.initialize();
   
     socket.onmessage = function (event) {
         let incomingMsg = JSON.parse(event.data);

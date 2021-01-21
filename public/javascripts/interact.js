@@ -351,7 +351,7 @@ function areTwoNodesConnected(position1, position2){
 }
 
 (function setup() {
-    var socket = new WebSocket(Setup.WEB_SOCKET_URL);
+    var socket = new WebSocket("ws://localhost:3000");
 
     var gs = new GameState(socket);
   

@@ -3,21 +3,8 @@ let rows = containerDiv.children;
 let yellows = new Array();
 let blacks = new Array();
 
-
 function GameState(socket){
-    this.playerType = null;
-    
-    this.takeTurn = function () {
-        for(let i = 0; i < rows.length; i++){
-            rows[i].id = "Row " + (rows.length-i);
-
-            let buttonsInRow = rows[i].children;
-            for(let j = 0; j < buttonsInRow.length; j++){
-                buttonsInRow[j].id = j + 1 + "," + (rows.length-i);
-                buttonsInRow[j].addEventListener("click", this.updateGame(this.playerType));
-            }
-        }
-    }   
+    this.playerType = null;  
 
     this.getPlayerType = function () {
         return this.playerType;
@@ -27,24 +14,26 @@ function GameState(socket){
         return this.playerType = p;
     }
 
-    this.updateGame = function(pt) {
+    this.updateGame = function(pt, id) {
         /*puts a yellow or black stone alternating each turn, disables the div's event listener,
         * and adds the position clicked to yellow's/black's positions list.
         * also checks every other position or array of positions in yellow's/black's stones
         * for a connection, if one is found, then the array is checked again until none are found
         */
         player = pt;
-        if(this.disabled){
+
+        let hexagonClicked = document.querySelector("#" + id);
+        if(hexagonClicked.disabled){
             return;
         }
-        console.log("My ID is " + this.id + ". I will now disable :)");
-        this.disabled = true;
+        console.log("My ID is " + id + ". I will now disable :)");
+        hexagonClicked.disabled = true;
         
         if (player === "A") {
             let stone = document.createElement("div");
             stone.className = "yellowStone";
 
-            let position = this.id.split(",") 
+            let position = id.split(",") 
             /*splits the id (which is in the format "x,y") by the comma
             into an array, where position[0] = x and position[1] = y.
             this is how we keep track of the stones on the board.*/
@@ -71,7 +60,7 @@ function GameState(socket){
             let stone = document.createElement("div");
             stone.className = "blackStone";
 
-            let position = this.id.split(",") 
+            let position = id.split(",") 
 
             blacks.push(position);
 
@@ -89,6 +78,15 @@ function GameState(socket){
             outgoingMsg.data = "B";
             socket.send(JSON.stringify(outgoingMsg));
         }   
+    }
+
+    for(let i = 0; i < rows.length; i++){
+        rows[i].id = "Row " + (rows.length-i);
+        let buttonsInRow = rows[i].children;
+        for(let j = 0; j < buttonsInRow.length; j++){
+            buttonsInRow[j].id = j + 1 + "," + (rows.length-i);
+            buttonsInRow[j].addEventListener("click", GameState.updateGame(GameState.getPlayerType(), buttonsInRow[j].id));
+        }
     }
 }
 
@@ -343,8 +341,9 @@ function areTwoNodesConnected(position1, position2){
     return false;
 }
 
+
 (function setup() {
-    var socket = new WebSocket(Setup.WEB_SOCKET_URL);
+    var socket = new WebSocket("ws://localhost:3000");
 
     var gs = new GameState(socket);
   
@@ -356,20 +355,19 @@ function areTwoNodesConnected(position1, position2){
 
             if (gs.getPlayerType() == "A") {
                 toggleAll(true);
-                gs.takeTurn();
+                
             }
         }
 
         if (gs.getPlayerType == "B" && incomingMsg.type == Messages.T_STONE_PLACED) {
             toggleAll(true);
-            gs.takeTurn();
         }
         
         if (incomingMsg.type == Messages.T_STONE_PLACED) {
             if (gs.getPlayerType == "A") {gs.setPlayerType("B")}
             else {gs.setPlayerType("A")}
             toggleAll(true);
-            gs.takeTurn();
+            
         }
     };
   

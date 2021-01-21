@@ -40,7 +40,7 @@
     */
     exports.T_STONE_PLACED = "STONE-PLACED";
     exports.O_STONE_PLACED = {
-        type: exports.T_STONE_PLACED
+        type: exports.T_STONE_PLACED,
         data: null
     };
     exports.S_STONE_PLACED = JSON.stringify(exports.O_STONE_PLACED);

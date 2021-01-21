@@ -78,7 +78,7 @@ wss.on("connection", function connection(ws) {
           /*
            * player A can place a stone
            */
-          if (oMsg.type == messages.T_STONE_PLACED) {
+          if (oMsg.type == messages.T_STONE_PLACED && oMsg.data == "A") {
             gameObj.placeStone(true);
     
             if (gameObj.hasTwoConnectedPlayers()) {
@@ -99,7 +99,7 @@ wss.on("connection", function connection(ws) {
           /*
            * player B can place a stone
            */
-          if (oMsg.type == messages.T_STONE_PLACED) {
+          if (oMsg.type == messages.T_STONE_PLACED && oMsg.data == "B") {
             gameObj.placeStone(false);
             gameObj.playerA.send(message);
             gameObj.setStatus("STONE PLACED");

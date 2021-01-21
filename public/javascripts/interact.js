@@ -2,75 +2,94 @@ let containerDiv = document.querySelector(".game-board-divs");
 let rows = containerDiv.children;
 let yellows = new Array();
 let blacks = new Array();
-let alter = 0;
 
 
-for(let i = 0; i < rows.length; i++){
-    rows[i].id = "Row " + (rows.length-i);
-
-    let buttonsInRow = rows[i].children;
-    for(let j = 0; j < buttonsInRow.length; j++){
-        buttonsInRow[j].id = j + 1 + "," + (rows.length-i);
-
-        buttonsInRow[j].addEventListener("click", doThings);
-    }
-}
-
-function doThings() {
-    /*puts a yellow or black stone alternating each turn, disables the div's event listener,
-    * and adds the position clicked to yellow's/black's positions list.
-    * also checks every other position or array of positions in yellow's/black's stones
-    * for a connection, if one is found, then the array is checked again until none are found
-    */
-    if(this.disabled){
-        return;
-    }
-    console.log("My ID is " + this.id + ". I will now disable :)");
-    this.disabled = true;
+function GameState(socket){
+    this.playerType = null;
     
-    if (alter%2 === 0) {
-        let stone = document.createElement("div");
-        stone.className = "yellowStone";
+    this.takeTurn = function () {
+        for(let i = 0; i < rows.length; i++){
+            rows[i].id = "Row " + (rows.length-i);
 
-        let position = this.id.split(",") 
-        /*splits the id (which is in the format "x,y") by the comma
-        into an array, where position[0] = x and position[1] = y.
-        this is how we keep track of the stones on the board.*/
-
-        yellows.push(position);
-
-        let top = this.children[0]
-        this.insertBefore(stone, top);
-        //we want the stones to be the first children of the div
-        //the following block is temporary, just a proof of concept
-        if(yellows.length > 1){
-            checkAllNodesForConnection(yellows);
-            if(checkForAWin(yellows, true)){
-                alert("Yellow just won (vertically)");
-                toggleAll(false);
+            let buttonsInRow = rows[i].children;
+            for(let j = 0; j < buttonsInRow.length; j++){
+                buttonsInRow[j].id = j + 1 + "," + (rows.length-i);
+                buttonsInRow[j].addEventListener("click", this.updateGame(this.playerType));
             }
         }
-        alter++;
-    }  
-    else {
-        let stone = document.createElement("div");
-        stone.className = "blackStone";
-
-        let position = this.id.split(",") 
-
-        blacks.push(position);
-
-        let top = this.children[0]
-        this.insertBefore(stone, top);
-        if(blacks.length > 1){
-            checkAllNodesForConnection(blacks);
-            if(checkForAWin(blacks, false)){
-                alert("Black just won (horizontally)");
-                toggleAll(false);
-            }
-        }
-        alter++;
     }   
+
+    this.getPlayerType = function () {
+        return this.playerType;
+    };
+    
+    this.setPlayerType = function (p) {
+        return this.playerType = p;
+    }
+
+    this.updateGame = function(pt) {
+        /*puts a yellow or black stone alternating each turn, disables the div's event listener,
+        * and adds the position clicked to yellow's/black's positions list.
+        * also checks every other position or array of positions in yellow's/black's stones
+        * for a connection, if one is found, then the array is checked again until none are found
+        */
+        player = pt;
+        if(this.disabled){
+            return;
+        }
+        console.log("My ID is " + this.id + ". I will now disable :)");
+        this.disabled = true;
+        
+        if (player === "A") {
+            let stone = document.createElement("div");
+            stone.className = "yellowStone";
+
+            let position = this.id.split(",") 
+            /*splits the id (which is in the format "x,y") by the comma
+            into an array, where position[0] = x and position[1] = y.
+            this is how we keep track of the stones on the board.*/
+
+            yellows.push(position);
+
+            let top = this.children[0]
+            this.insertBefore(stone, top);
+            //we want the stones to be the first children of the div
+            //the following block is temporary, just a proof of concept
+            if(yellows.length > 1){
+                checkAllNodesForConnection(yellows);
+                if(checkForAWin(yellows, true)){
+                    alert("Yellow just won (vertically)");
+                    toggleAll(false);
+                }
+            }
+            toggleAll(false);
+            var outgoingMsg = Messages.O_STONE_PLACED;
+            outgoingMsg.data = "A";
+            socket.send(JSON.stringify(outgoingMsg));
+        }  
+        else {
+            let stone = document.createElement("div");
+            stone.className = "blackStone";
+
+            let position = this.id.split(",") 
+
+            blacks.push(position);
+
+            let top = this.children[0]
+            this.insertBefore(stone, top);
+            if(blacks.length > 1){
+                checkAllNodesForConnection(blacks);
+                if(checkForAWin(blacks, false)){
+                    alert("Black just won (horizontally)");
+                    toggleAll(false);
+                }
+            }
+            toggleAll(false);
+            var outgoingMsg = Messages.O_STONE_PLACED;
+            outgoingMsg.data = "B";
+            socket.send(JSON.stringify(outgoingMsg));
+        }   
+    }
 }
 
 function toggleAll(state){
@@ -326,11 +345,32 @@ function areTwoNodesConnected(position1, position2){
 
 (function setup() {
     var socket = new WebSocket(Setup.WEB_SOCKET_URL);
+
+    var gs = new GameState(socket);
   
     socket.onmessage = function (event) {
         let incomingMsg = JSON.parse(event.data);
 
+        if (incomingMsg.type == Messages.T_PLAYER_TYPE) {
+            gs.setPlayerType(incomingMsg.data);
+
+            if (gs.getPlayerType() == "A") {
+                toggleAll(true);
+                gs.takeTurn();
+            }
+        }
+
+        if (gs.getPlayerType == "B" && incomingMsg.type == Messages.T_STONE_PLACED) {
+            toggleAll(true);
+            gs.takeTurn();
+        }
         
+        if (incomingMsg.type == Messages.T_STONE_PLACED) {
+            if (gs.getPlayerType == "A") {gs.setPlayerType("B")}
+            else {gs.setPlayerType("A")}
+            toggleAll(true);
+            gs.takeTurn();
+        }
     };
   
     socket.onopen = function () {

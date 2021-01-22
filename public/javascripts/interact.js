@@ -1,3 +1,5 @@
+let clickSound = new Audio("../data/click.wav");
+
 function GameState(socket, board, sb){
     this.playerType = null;  
     this.statusBar = sb;
@@ -69,6 +71,7 @@ function GameState(socket, board, sb){
 
             let top = hexagonClicked.children[0]
             hexagonClicked.insertBefore(stone, top);
+            clickSound.play();
             //we want the stones to be the first children of the div
             //the following block is temporary, just a proof of concept
             if(this.playerType == pushedPlayerType){
@@ -114,6 +117,7 @@ function GameState(socket, board, sb){
 
             let top = hexagonClicked.children[0]
             hexagonClicked.insertBefore(stone, top);
+            clickSound.play();
             if(this.playerType == pushedPlayerType){
                 if(this.blacks.length > 1){
                     checkAllNodesForConnection(this.blacks);

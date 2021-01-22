@@ -210,6 +210,26 @@ p {
     margin-left: 125px; 
 }
 
+.game-background::before{
+    content: "";
+    background-color: black;
+	width: 25px;
+	height: 515px;
+	position: absolute;
+}
+
+.game-background::after{
+    content: "";
+    background-color: black;
+	width: 25px;
+	height: 515px;
+    position: absolute;
+    left: 585px;
+    z-index: 10;
+}
+
+
+
 .black-bar {
 	background-color: black;
 	transform: skew(-30.5deg);

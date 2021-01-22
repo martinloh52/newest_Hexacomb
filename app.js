@@ -55,6 +55,7 @@ wss.on("connection", function connection(ws) {
     let playerType = currentGame.addPlayer(con);
     websockets[con.id] = currentGame;
     let waiting = true;
+    gameStatus.playersOnline++;
 
     if(playerType == "B"){
       waiting = false;
@@ -86,7 +87,6 @@ wss.on("connection", function connection(ws) {
     
         let gameObj = websockets[con.id];
         let isPlayerA = gameObj.playerA == con ? true : false;
-        gameStatus.playersOnline++;
     
         if (isPlayerA) {
           /*
@@ -108,6 +108,7 @@ wss.on("connection", function connection(ws) {
           if (oMsg.type == messages.T_GAME_WON_BY) {
             gameObj.setStatus(oMsg.data);
             gameObj.playerB.send(message);
+            gameObj.playerA.send(messages.T_GAME_ABORTED);
             //game was won by somebody, update statistics
             gameStatus.gamesCompleted++;
           }
@@ -128,6 +129,7 @@ wss.on("connection", function connection(ws) {
           if (oMsg.type == messages.T_GAME_WON_BY) {
             gameObj.setStatus(oMsg.data);
             gameObj.playerA.send(message);
+            gameObj.playerB.send(message.T_GAME_ABORTED);
             //game was won by somebody, update statistics
             gameStatus.gamesCompleted++;
           }

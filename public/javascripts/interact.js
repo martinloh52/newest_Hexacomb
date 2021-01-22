@@ -1,4 +1,5 @@
 let clickSound = new Audio("../data/click.wav");
+let timer = null
 
 function GameState(socket, board, sb){
     this.playerType = null;  
@@ -78,6 +79,7 @@ function GameState(socket, board, sb){
                 if(this.yellows.length > 1){
                     checkAllNodesForConnection(this.yellows);
                     if(checkForAWin(this.yellows, true)){
+                        stopTimer(timer);
                         //still gotta send the move to black, lol get rekt
                         this.toggleAll(false);
                         var outgoingMsg = Messages.O_STONE_PLACED;
@@ -122,6 +124,7 @@ function GameState(socket, board, sb){
                 if(this.blacks.length > 1){
                     checkAllNodesForConnection(this.blacks);
                     if(checkForAWin(this.blacks, false)){
+                        stopTimer(timer);
                         //still gotta send the message to yellow, lol get rekt
                         this.toggleAll(false);
                         var outgoingMsg = Messages.O_STONE_PLACED;
@@ -221,7 +224,6 @@ function StatusBar() {
     var sb = new StatusBar();
     let board = document.querySelector(".game-board-divs");
     var gs = new GameState(socket, board, sb);
-    var timer = null;
     gs.initialize();
   
     socket.onmessage = function (event) {

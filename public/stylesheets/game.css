@@ -234,3 +234,25 @@ p {
     padding-left: 50px;
     padding-top: 50px;
 }
+
+.resize{
+    position:fixed;
+    z-index: 10;
+    bottom:30px;
+    background-color:antiquewhite;
+    width:80%;
+    height:auto;
+    display:none;
+    border: 2px solid chocolate;
+    text-decoration: darkolivegreen;
+    color:black;
+    font-size:1em;
+}
+@media only screen and (max-width: 800px){
+    .resize{
+        display:block;
+        content: "<p>This page is best viewed on a wider screen.</p>";
+    }
+
+
+}

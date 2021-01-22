@@ -6,5 +6,6 @@ var Status = {
     playAgain: "&nbsp;<a href='/play'>Play again!</a>",
     takeTurn: "It's your turn.",
     wait: "It's opponent's turn.",
-    aborted: "Opponent resigned. <a href='/play'>Play again!</a>"
+    aborted: "Opponent resigned. <a href='/play'>Play again!</a>",
+    no2players: "Waiting for opponent to connect",
 }

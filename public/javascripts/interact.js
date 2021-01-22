@@ -217,6 +217,9 @@ function StatusBar() {
             gs.setPlayerType(incomingMsg.data);
             gs.addEventListeners();
             gs.toggleAll(false);
+            if(gs.getPlayerType() == "B"){
+                sb.setStatus(Status["wait"]);
+            }
         }
         
         if (incomingMsg.type == Messages.T_STONE_PLACED) {

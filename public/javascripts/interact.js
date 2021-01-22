@@ -95,6 +95,8 @@ function GameState(socket, board, sb){
                     sb.setStatus(Status["wait"]);
                 }
                 this.toggleAll(false);
+                document.getElementById("yellow").style.background = "url(../images/player_1_wait.png) no-repeat left";
+                document.getElementById("black").style.background = "url(../images/player_2_play.png) no-repeat left";
                 var outgoingMsg = Messages.O_STONE_PLACED;
                 outgoingMsg.data = "A";
                 outgoingMsg.position = id;
@@ -136,6 +138,8 @@ function GameState(socket, board, sb){
                     sb.setStatus(Status["wait"]);
                 }
                 this.toggleAll(false);
+                document.getElementById("yellow").style.background = "url(../images/player_1_play.png) no-repeat left";
+                document.getElementById("black").style.background = "url(../images/player_2_wait.png) no-repeat left";
                 var outgoingMsg = Messages.O_STONE_PLACED;
                 outgoingMsg.data = "B";
                 outgoingMsg.position = id;
@@ -235,6 +239,13 @@ function StatusBar() {
             gs.toggleAll(true);
             sb.setStatus(Status["takeTurn"]);
             let otherPlayer = gs.getPlayerType() == "A" ? "B" : "A"; 
+            if (otherPlayer == "A"){
+                document.getElementById("yellow").style.background = "url(../images/player_1_wait.png) no-repeat left";
+                document.getElementById("black").style.background = "url(../images/player_2_play.png) no-repeat left";
+            } else {
+                document.getElementById("yellow").style.background = "url(../images/player_1_play.png) no-repeat left";
+                document.getElementById("black").style.background = "url(../images/player_2_wait.png) no-repeat left";
+            }
             gs.updateGame(incomingMsg.position, otherPlayer);
         }
 

@@ -95,10 +95,9 @@ function GameState(socket, board, sb){
                     sb.setStatus(Status["wait"]);
                 }
                 this.toggleAll(false);
-                
-                var outgoingMsg = Messages.O_STONE_PLACED;
                 document.getElementById("yellow").style.background = "url(../images/player_1_wait.png) no-repeat left";
                 document.getElementById("black").style.background = "url(../images/player_2_play.png) no-repeat left";
+                var outgoingMsg = Messages.O_STONE_PLACED;
                 outgoingMsg.data = "A";
                 outgoingMsg.position = id;
                 socket.send(JSON.stringify(outgoingMsg));

@@ -86,12 +86,14 @@ function GameState(socket, board, sb){
                         finalMsg.data = "A";
                         socket.send(JSON.stringify(finalMsg));
                         this.toggleAll(false);
-
+                        sb.setStatus(Status["gameWon"]);
                         socket.close();
                         this.toggleAll(false);
                     }
                 }
-                sb.setStatus(Status["wait"]);
+                if (sb.getStatus() != Status["gameWon"]) {
+                    sb.setStatus(Status["wait"]);
+                }
                 this.toggleAll(false);
                 var outgoingMsg = Messages.O_STONE_PLACED;
                 outgoingMsg.data = "A";
@@ -121,15 +123,18 @@ function GameState(socket, board, sb){
                         outgoingMsg.position = id;
                         socket.send(JSON.stringify(outgoingMsg));
 
-
                         let finalMsg = Messages.O_GAME_WON_BY;
                         finalMsg.data = "B";
                         socket.send(JSON.stringify(finalMsg));
-                        this.toggleAll(false);        
+                        this.toggleAll(false);  
+                        sb.setStatus(Status["gameWon"]);      
                         socket.close();
+                        this.toggleAll(false);  
                     }
                 }
-                sb.setStatus(Status["wait"]);
+                if (sb.getStatus() != Status["gameWon"]) {
+                    sb.setStatus(Status["wait"]);
+                }
                 this.toggleAll(false);
                 var outgoingMsg = Messages.O_STONE_PLACED;
                 outgoingMsg.data = "B";
@@ -190,6 +195,10 @@ function StatusBar() {
     this.setStatus = function(status) {
       document.getElementById("statusBar").innerHTML = status;
     };
+
+    this.getStatus = function() {
+        return document.getElementById("statusBar").innerHTML;
+    }
 }
 
 
@@ -227,6 +236,11 @@ function StatusBar() {
             sb.setStatus(Status["takeTurn"]);
             let otherPlayer = gs.getPlayerType() == "A" ? "B" : "A"; 
             gs.updateGame(incomingMsg.position, otherPlayer);
+        }
+
+        if (incomingMsg.type == Messages.T_GAME_WON_BY) {
+            gs.toggleAll(false);
+            sb.setStatus(Status["gameLost"]);
         }
     };
   

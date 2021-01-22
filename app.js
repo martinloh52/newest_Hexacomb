@@ -61,7 +61,7 @@ wss.on("connection", function connection(ws) {
       currentGame.playerA.send(outgoingMsg);
       con.send(outgoingMsg);
     }
-    
+
     console.log(
         "Player %s placed in game %s as %s",
         con.id,
@@ -100,6 +100,7 @@ wss.on("connection", function connection(ws) {
           */
           if (oMsg.type == messages.T_GAME_WON_BY) {
             gameObj.setStatus(oMsg.data);
+            gameObj.playerB.send(message);
             //game was won by somebody, update statistics
             gameStatus.gamesCompleted++;
           }
@@ -119,6 +120,7 @@ wss.on("connection", function connection(ws) {
            */
           if (oMsg.type == messages.T_GAME_WON_BY) {
             gameObj.setStatus(oMsg.data);
+            gameObj.playerA.send(message);
             //game was won by somebody, update statistics
             gameStatus.gamesCompleted++;
           }

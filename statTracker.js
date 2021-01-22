@@ -3,7 +3,8 @@ var gameStatus = {
     gamesInitialized: 0 /* number of games initialized */,
     gamesAborted: 0 /* number of games aborted */,
     playersOnline: 0 /*number of current players*/,
-    gamesCompleted: 0 /* number of games successfully completed */
+    gamesCompleted: 0 /* number of games successfully completed */,
+    playersWaiting: 0
   };
   
   module.exports = gameStatus;

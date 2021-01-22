@@ -40,14 +40,49 @@ body {
     background-size: cover;
     background-attachment: fixed;
     background-position: center;
+    display: grid;
+    grid-template-columns: 60% 20% 20%;
+    grid-template-rows: 30% 30% 20% 20%;
+}
+
+.res:hover{
+    animation-name:darken;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+.res:not(:hover){
+    animation: brighten 1s;
+}
+
+#logo:active{
+    animation-name:rotateHue;
+    animation-duration:5s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes rotateHue{
+    from{}
+    to{filter: hue-rotate(360deg)}
+}
+
+@keyframes brighten{
+    from{}
+    to{filter: brightness(100%);}
+}
+
+@keyframes darken{
+    from{}
+    to{filter: brightness(80%);}
 }
 
 .res {
     width: 122px;
     height: 104px;
-    float: left;
-    margin-top: 4%;
-    margin-left: 5%;
+    grid-column-start: 3;
+    grid-column-end: 4;
+    grid-row-start: 4;
+    grid-row-end: 5;
 }
 
 .res path {
@@ -60,15 +95,22 @@ body {
 }
 
 #logo {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 2;
     width: 200px;
     height: 200px;
-    margin-left: 30%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 ul {
-    float: right;
-    margin-right: 15%;
-    margin-top: 5%;
+    grid-column-start: 2;
+    grid-column-end: 4;
+    grid-row-start: 2;
+    grid-row-end: 3;
     list-style-type: none;
 }
 
@@ -89,50 +131,43 @@ li {
     background: url(../images/player_2_wait.png) no-repeat left;
 }
 
+#matchTime {
+    grid-column-start: 2;
+    grid-column-end: 4;
+    grid-row-start: 3;
+    grid-row-end: 4;
+}
+
+p {
+    font-family: honeycomb;
+    font-size: 1.75em;
+    text-align: center;
+}
+
 #board {
     width: 750px;
     height: 450px;
-    margin-left: 15%;
-    margin-top: 5%;
-    position:absolute;
 }
 
 #middle p {
-    float: right;
     font-family: honeycomb;
     font-size: 1.75em;
-    margin-top: 20%;
 }
 
 #bottom p {
     font-family: honeycomb;
     font-size: 1.75em;
-    margin-top: 2%;
 }
 
 #bottom p, svg {
     display: inline;
 }
 
-#turn {
-    margin-left: 25%;
-}
-
-.rules {
-    width: 122px;
-    height: 104px;
-    float: right;
-    margin-right: 14.6%;
-    margin-top: -1.2%;
-}
-
-.rules path {
-    fill: transparent;
-}
-
-.rules text {
-    font-family: honeycomb;
-    font-size: 2.5em;
+#statusBar {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 4;
+    grid-row-end: 5;
 }
 
 .game-board-divs{
@@ -187,6 +222,10 @@ li {
 }
 
 .entire-board{
-    margin-left:50px;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 5;
+    padding-left: 50px;
+    padding-top: 50px;
 }
-

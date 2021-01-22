@@ -415,10 +415,6 @@ function areTwoNodesConnected(position1, position2){
                 gs.toggleAll(true);
             }
         }
-        /*
-        if (gs.getPlayerType == "B" && incomingMsg.type == Messages.T_STONE_PLACED) {
-            gs.toggleAll(true);
-        } */
         
         if (incomingMsg.type == Messages.T_STONE_PLACED) {
             gs.toggleAll(true);

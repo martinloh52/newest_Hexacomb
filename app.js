@@ -12,10 +12,10 @@ var app = express();
 
 app.use(express.static(__dirname + "/public"));
 
-/* GET home page */
-app.get("/", function(req, res) {
-    res.sendFile("splash.html", { root: "./public" });
-});
+app.set('view engine', 'ejs')
+app.get('/', function(req, res) {
+    res.render('splash.ejs', { playersOnline: gameStatus.playersOnline });
+})
 
 /* Pressing the 'PLAY' button, returns this page */
 app.get("/play", function(req, res) {
@@ -80,6 +80,7 @@ wss.on("connection", function connection(ws) {
     
         let gameObj = websockets[con.id];
         let isPlayerA = gameObj.playerA == con ? true : false;
+        gameStatus.playersOnline++;
     
         if (isPlayerA) {
           /*
@@ -133,6 +134,7 @@ wss.on("connection", function connection(ws) {
          * source: https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
          */
         console.log(con.id + " disconnected ...");
+        gameStatus.playersOnline--;
     
         if (code == "1001") {
           /*

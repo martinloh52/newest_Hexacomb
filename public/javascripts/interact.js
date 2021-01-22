@@ -183,7 +183,7 @@ function startTimer(){
     let minutesValue = 0;
     let secondsValue = 0;
 
-    setInterval(function(){
+    let timer = setInterval(function(){
         secondsValue++;
         if(secondsValue === 60){
             secondsValue = 0;
@@ -197,6 +197,11 @@ function startTimer(){
         minutes.innerHTML = minutesText;
         seconds.innerHTML = secondsText;
     }, 1000);
+    return timer;
+}
+
+function stopTimer(timer){
+    clearInterval(timer);
 }
 
 function StatusBar() {
@@ -216,14 +221,20 @@ function StatusBar() {
     var sb = new StatusBar();
     let board = document.querySelector(".game-board-divs");
     var gs = new GameState(socket, board, sb);
+    var timer = null;
     gs.initialize();
   
     socket.onmessage = function (event) {
         let incomingMsg = JSON.parse(event.data);
         console.log(incomingMsg);
 
+        if(incomingMsg.type == Messages.T_GAME_ABORTED){
+            stopTimer(timer);
+            sb.setStatus(Status["aborted"]);
+        }
+
         if(incomingMsg.type == Messages.T_BOTH_READY){
-            startTimer();
+            timer = startTimer();
             if(gs.getPlayerType() == "A"){
                 sb.setStatus(Status["takeTurn"]);
                 gs.toggleAll(true);
@@ -240,6 +251,7 @@ function StatusBar() {
         }
         
         if (incomingMsg.type == Messages.T_STONE_PLACED) {
+
             gs.toggleAll(true);
             sb.setStatus(Status["takeTurn"]);
             let otherPlayer = gs.getPlayerType() == "A" ? "B" : "A"; 
@@ -254,6 +266,7 @@ function StatusBar() {
         }
 
         if (incomingMsg.type == Messages.T_GAME_WON_BY) {
+            stopTimer(timer);
             gs.toggleAll(false);
             sb.setStatus(Status["gameLost"]);
         }

@@ -14,7 +14,7 @@ app.use(express.static(__dirname + "/public"));
 
 app.set('view engine', 'ejs')
 app.get('/', function(req, res) {
-    res.render('splash.ejs', { playersOnline: gameStatus.playersOnline });
+    res.render('splash.ejs', { playersOnline: gameStatus.playersOnline, gamesCompleted: gameStatus.gamesCompleted, playersWaiting: gameStatus.playersWaiting });
 })
 
 /* Pressing the 'PLAY' button, returns this page */
@@ -54,12 +54,18 @@ wss.on("connection", function connection(ws) {
     con.id = connectionID++;
     let playerType = currentGame.addPlayer(con);
     websockets[con.id] = currentGame;
+    let waiting = true;
 
     if(playerType == "B"){
+      waiting = false;
       console.log("Ready to game...");
-      let outgoingMsg = messages.S_BOTH_READY
+      let outgoingMsg = messages.S_BOTH_READY;
       currentGame.playerA.send(outgoingMsg);
       con.send(outgoingMsg);
+      gameStatus.playersWaiting = 0;
+    }
+    else{
+      gameStatus.playersWaiting = 1;
     }
 
     console.log(
@@ -135,6 +141,11 @@ wss.on("connection", function connection(ws) {
          */
         console.log(con.id + " disconnected ...");
         gameStatus.playersOnline--;
+
+        if(waiting){
+          gameStatus.playersWaiting = 0;
+          waiting = false;
+        }
     
         if (code == "1001") {
           /*
@@ -145,6 +156,21 @@ wss.on("connection", function connection(ws) {
           if (gameObj.isValidTransition(gameObj.gameState, "ABORTED")) {
             gameObj.setStatus("ABORTED");
             gameStatus.gamesAborted++;
+            gameStatus.gamesCompleted++;
+
+            try{
+              gameObj.playerA.send(messages.S_GAME_ABORTED);
+            }
+            catch(e){
+              console.log("Player B closed.");
+            }
+
+            try{
+              gameObj.playerB.send(messages.S_GAME_ABORTED);
+            }
+            catch(e){
+              console.log("Player A closed.");
+            }
     
             /*
              * determine whose connection remains open;

@@ -83,6 +83,7 @@ body {
     grid-column-end: 4;
     grid-row-start: 4;
     grid-row-end: 5;
+    margin-left: 71px;
 }
 
 .res path {
@@ -168,6 +169,10 @@ p {
     grid-column-end: 3;
     grid-row-start: 4;
     grid-row-end: 5;
+    padding: 25px;
+    border: 3px solid black;
+    border-radius: 18px;
+    background-color: #f9ecc2;
 }
 
 .game-board-divs{

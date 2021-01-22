@@ -35,6 +35,16 @@
     };
     exports.S_PLAYER_B = JSON.stringify(exports.O_PLAYER_B);
   
+    /**
+     * Server to both clients: the game can now start
+     */
+
+    exports.T_BOTH_READY = "BOTH-READY";
+    exports.O_BOTH_READY = {
+        type: exports.T_BOTH_READY
+    };
+    exports.S_BOTH_READY = JSON.stringify(exports.O_BOTH_READY);
+    
     /*
      * Client to server: placed a stone
     */

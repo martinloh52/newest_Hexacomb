@@ -55,6 +55,13 @@ wss.on("connection", function connection(ws) {
     let playerType = currentGame.addPlayer(con);
     websockets[con.id] = currentGame;
 
+    if(playerType == "B"){
+      console.log("Ready to game...");
+      let outgoingMsg = messages.S_BOTH_READY
+      currentGame.playerA.send(outgoingMsg);
+      con.send(outgoingMsg);
+    }
+    
     console.log(
         "Player %s placed in game %s as %s",
         con.id,

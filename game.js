@@ -149,5 +149,12 @@ game.prototype.addPlayer = function(p) {
       return "B";
     }
 };
+
+game.prototype.removePlayerAFromLobby = function(){
+  this.playerA = null;
+  if(this.isValidTransition(this.gameState, "0 JOINT")){
+    this.gameState = this.transitionStates[0];
+  }
+}
   
 module.exports = game;

@@ -281,8 +281,8 @@ p {
 
 }
 
-@media only screen and (orientation:landscape){
-    .entire-board{
+@media only screen and (orientation:landscape) and (max-width:800){
+    .scale-me{
         zoom: .5;
         -moz-transform: scale(.5);
     }

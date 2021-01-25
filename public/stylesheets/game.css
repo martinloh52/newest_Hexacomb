@@ -272,13 +272,6 @@ p {
     .resize{
         display:block;
     }
-
-    .entire-board{
-        zoom: .5;
-        -moz-transform: scale(.5);
-    }
-
-
 }
 
 @media only screen and (orientation:landscape) and (max-width:800){

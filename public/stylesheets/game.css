@@ -290,4 +290,8 @@ p {
     .resize{
         display:none;
     }
+
+    body{
+        font-size:smaller;
+    }
 }

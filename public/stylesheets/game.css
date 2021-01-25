@@ -281,7 +281,7 @@ p {
 
 }
 
-@media only screen and (orientation:landscape) and (max-width:700){
+@media only screen and (orientation:landscape) and (max-width:800){
     .scale-me{
         zoom: .5;
         -moz-transform: scale(.5);

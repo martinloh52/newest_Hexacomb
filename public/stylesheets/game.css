@@ -268,10 +268,9 @@ p {
     color:black;
     font-size:1em;
 }
-@media only screen and (max-width: 1000px){
+@media only screen and (max-width: 800px){
     .resize{
         display:block;
-        content: "<p>This page is best viewed on a wider screen.</p>";
     }
 
     .entire-board{
@@ -280,4 +279,15 @@ p {
     }
 
 
+}
+
+@media only screen and (orientation:portrait) and (max-width:800){
+    .entire-board{
+        zoom: .5;
+        -moz-transform: scale(.5);
+    }
+
+    .resize{
+        display:none;
+    }
 }

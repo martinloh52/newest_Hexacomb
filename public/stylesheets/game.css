@@ -268,7 +268,7 @@ p {
     color:black;
     font-size:1em;
 }
-@media only screen and (max-width: 800px){
+@media only screen and (max-width: 1000px){
     .resize{
         display:block;
         content: "<p>This page is best viewed on a wider screen.</p>";

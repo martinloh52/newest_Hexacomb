@@ -235,6 +235,13 @@ p {
     animation-duration: 500ms;
 }
 
+.flashMeGreen{
+    animation-name:flashGreen;
+    animation-iteration-count: 6;
+    animation-direction: alternate;
+    animation-duration: 500ms;
+}
+
 
 
 .black-bar {
@@ -248,6 +255,11 @@ p {
 @keyframes flash{
     from{background-color:f9ecc2}
     to{background-color:salmon}
+}
+
+@keyframes flashGreen{
+    from{background-color:f9ecc2}
+    to{background-color:greenyellow}
 }
 
 .entire-board{

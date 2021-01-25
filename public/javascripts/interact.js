@@ -213,11 +213,13 @@ function StatusBar() {
         let bar = document.getElementById("statusBar");
         bar.innerHTML = status;
         
-        if(status == Status["gameWon"]
-           || status == Status["gameLost"]
-           || status == Status["aborted"]){
+        if(status == Status["gameLost"] || status == Status["aborted"]){
 
-          bar.classList.add("flashMe");
+            bar.classList.add("flashMe");
+
+        }
+        else if(status == Status["gameWon"]){
+            bar.classList.add("flashMeGreen");
         }
     };
 

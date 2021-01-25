@@ -210,12 +210,20 @@ function stopTimer(timer){
 
 function StatusBar() {
     this.setStatus = function(status) {
-      document.getElementById("statusBar").innerHTML = status;
+        let bar = document.getElementById("statusBar");
+        bar.innerHTML = status;
+        
+        if(status == Status["gameWon"]
+           || status == Status["gameLost"]
+           || status == Status["aborted"]){
+
+          bar.classList.add("flashMe");
+        }
     };
 
     this.getStatus = function() {
         return document.getElementById("statusBar").innerHTML;
-    }
+    };
 }
 
 

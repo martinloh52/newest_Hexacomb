@@ -54,7 +54,7 @@ wss.on("connection", function connection(ws) {
     con.id = connectionID++;
     let playerType = currentGame.addPlayer(con);
     websockets[con.id] = currentGame;
-    let waiting = true;
+    let waiting;
     gameStatus.playersOnline++;
 
     if(playerType == "B"){
@@ -66,6 +66,7 @@ wss.on("connection", function connection(ws) {
       gameStatus.playersWaiting = 0;
     }
     else{
+      waiting = true;
       gameStatus.playersWaiting = 1;
     }
 

@@ -228,6 +228,13 @@ p {
     z-index: 10;
 }
 
+.flashMe{
+    animation-name: flash;
+    animation-iteration-count: 6;
+    animation-direction: alternate;
+    animation-duration: 500ms;
+}
+
 
 
 .black-bar {
@@ -238,12 +245,9 @@ p {
 	position: absolute;
 }
 
-.black-bar.one{
-    margin-left: 121px;
-}
-
-.black-bar.two{
-    margin-left: 715px;
+@keyframes flash{
+    from{background-color:f9ecc2}
+    to{background-color:salmon}
 }
 
 .entire-board{

@@ -274,5 +274,10 @@ p {
         content: "<p>This page is best viewed on a wider screen.</p>";
     }
 
+    .game-board-divs{
+        zoom: .5;
+        -moz-transform: scale(.5);
+    }
+
 
 }

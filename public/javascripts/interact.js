@@ -234,6 +234,7 @@ function StatusBar() {
         if(incomingMsg.type == Messages.T_GAME_ABORTED){
             stopTimer(timer);
             sb.setStatus(Status["aborted"]);
+            socket.close();
         }
 
         if(incomingMsg.type == Messages.T_BOTH_READY){

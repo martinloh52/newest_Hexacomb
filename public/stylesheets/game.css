@@ -281,7 +281,7 @@ p {
 
 }
 
-@media only screen and (orientation:portrait){
+@media only screen and (orientation:landscape){
     .entire-board{
         zoom: .5;
         -moz-transform: scale(.5);

@@ -281,7 +281,7 @@ p {
 
 }
 
-@media only screen and (orientation:portrait) and (max-width:800){
+@media only screen and (orientation:portrait){
     .entire-board{
         zoom: .5;
         -moz-transform: scale(.5);

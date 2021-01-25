@@ -153,7 +153,7 @@ game.prototype.addPlayer = function(p) {
 game.prototype.removePlayerAFromLobby = function(){
   this.playerA = null;
   if(this.isValidTransition(this.gameState, "0 JOINT")){
-    this.gameState = this.transitionStates[0];
+    this.setStatus("0 JOINT");
   }
 }
   

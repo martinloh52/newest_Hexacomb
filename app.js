@@ -147,7 +147,7 @@ wss.on("connection", function connection(ws) {
         if(waiting){
           gameStatus.playersWaiting = 0;
           waiting = false;
-          websockets[con.id].removePlayerAFromLobby();
+          currentGame.removePlayerAFromLobby();
         }
     
         if (code == "1001") {

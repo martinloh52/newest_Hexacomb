@@ -7,7 +7,7 @@ var messages = require("./public/javascripts/messages");
 var gameStatus = require("./statTracker");
 var Game = require("./game");
 
-var port = process.argv[2];
+var port = process.env.PORT || 3000;
 var app = express();
 
 app.use(express.static(__dirname + "/public"));

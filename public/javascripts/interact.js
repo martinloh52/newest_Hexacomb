@@ -1,5 +1,6 @@
 let clickSound = new Audio("../data/click.wav");
 let timer = null
+let HOST = location.origin.replace(/^http/, "ws");
 
 function GameState(socket, board, sb){
     this.playerType = null;  
@@ -219,7 +220,7 @@ function StatusBar() {
 
 
 (function setup() {
-    var socket = new WebSocket("ws://localhost:3000");
+    var socket = new WebSocket(HOST);
 
     var sb = new StatusBar();
     let board = document.querySelector(".game-board-divs");

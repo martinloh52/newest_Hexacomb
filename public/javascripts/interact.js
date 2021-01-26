@@ -208,6 +208,11 @@ function stopTimer(timer){
     clearInterval(timer);
 }
 
+function changeResignButton(){
+    let resign = document.querySelector(".resignText");
+    resign.innerHTML = "exit";
+}
+
 function StatusBar() {
     this.setStatus = function(status) {
         let bar = document.getElementById("statusBar");
@@ -243,6 +248,7 @@ function StatusBar() {
 
         if(incomingMsg.type == Messages.T_GAME_ABORTED){
             stopTimer(timer);
+            changeResignButton();
             sb.setStatus(Status["aborted"]);
             socket.close();
         }
@@ -281,6 +287,7 @@ function StatusBar() {
 
         if (incomingMsg.type == Messages.T_GAME_WON_BY) {
             stopTimer(timer);
+            changeResignButton();
             gs.toggleAll(false);
             sb.setStatus(Status["gameLost"]);
         }

@@ -83,6 +83,7 @@ function GameState(socket, board, sb){
                         stopTimer(timer);
                         //still gotta send the move to black, lol get rekt
                         this.toggleAll(false);
+                        changeResignButton();
                         var outgoingMsg = Messages.O_STONE_PLACED;
                         outgoingMsg.data = "A";
                         outgoingMsg.position = id;
@@ -128,6 +129,7 @@ function GameState(socket, board, sb){
                         stopTimer(timer);
                         //still gotta send the message to yellow, lol get rekt
                         this.toggleAll(false);
+                        changeResignButton();
                         var outgoingMsg = Messages.O_STONE_PLACED;
                         outgoingMsg.data = "B";
                         outgoingMsg.position = id;

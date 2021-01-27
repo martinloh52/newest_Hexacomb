@@ -242,6 +242,11 @@ p {
     animation-duration: 500ms;
 }
 
+.salmon{
+    fill: salmon;
+    stroke: salmon;
+}
+
 
 
 .black-bar {

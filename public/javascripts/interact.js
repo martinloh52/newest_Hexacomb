@@ -211,6 +211,8 @@ function stopTimer(timer){
 function changeResignButton(){
     let resign = document.querySelector(".resignText");
     resign.innerHTML = "exit";
+    let polygon = document.querySelector(".cls-1");
+    polygon.classList.add("salmon");
 }
 
 function StatusBar() {

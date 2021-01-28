@@ -43,6 +43,37 @@ li {
     margin-top: 30px;
 }
 
+.darkHover:hover{
+    animation-name:darken;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+.darkHover:not(:hover){
+    animation: brighten 1s;
+}
+
+#logo:active{
+    animation-name:rotateHue;
+    animation-duration:5s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes rotateHue{
+    from{}
+    to{filter: hue-rotate(360deg)}
+}
+
+@keyframes brighten{
+    from{}
+    to{filter: brightness(100%);}
+}
+
+@keyframes darken{
+    from{}
+    to{filter: brightness(80%);}
+}
+
 path {
     fill: transparent;
 }

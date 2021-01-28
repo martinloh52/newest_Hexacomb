@@ -45,13 +45,13 @@ body {
     grid-template-rows: 30% 30% 20% 20%;
 }
 
-.res:hover{
+.darkHover:hover{
     animation-name:darken;
     animation-duration: 1s;
     animation-fill-mode: forwards;
 }
 
-.res:not(:hover){
+.darkHover:not(:hover){
     animation: brighten 1s;
 }
 
@@ -76,7 +76,7 @@ body {
     to{filter: brightness(80%);}
 }
 
-.res {
+.darkHover {
     width: 122px;
     height: 104px;
     grid-column-start: 3;
@@ -86,11 +86,11 @@ body {
     margin-left: 71px;
 }
 
-.res path {
+.darkHover path {
     fill: transparent;
 }
 
-.res text {
+.darkHover text {
     font-family: honeycomb;
     font-size: 2em;
 }

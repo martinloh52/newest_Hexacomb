@@ -11,7 +11,6 @@ var gameStatus = {
           return;
         }
         console.log("from statTracker.js: " + data);
-        return data;
       })
     },
     playersWaiting: 0

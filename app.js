@@ -16,15 +16,17 @@ app.use(express.static(__dirname + "/public"));
 
 app.set('view engine', 'ejs')
 app.get('/', function(req, res) {
-    GamesCompleted = 0;
-    fs.readFile('plays.txt', function read(err, data) {
-    if (err) {
-        throw err;
+
+    var GamesCompleted = function(){
+      fs.readFile('plays.txt', function read(err, data) {
+        if (err) {
+           throw err;
+        }
+        return data
+      });
     }
-    GamesCompleted = data;
-});
-    console.log("We have " + GamesCompleted + " completed games");
-    res.render('splash.ejs', { playersOnline: gameStatus.playersOnline, gamesCompleted: GamesCompleted, playersWaiting: gameStatus.playersWaiting });
+    console.log("We have " + GamesCompleted() + " completed games");
+    res.render('splash.ejs', { playersOnline: gameStatus.playersOnline, gamesCompleted: GamesCompleted(), playersWaiting: gameStatus.playersWaiting });
 })
 
 /* Pressing the 'PLAY' button, returns this page */

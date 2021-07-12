@@ -19,7 +19,7 @@ app.get('/', function(req, res) {
 
     const GamesCompleted = fs.readFileSync("plays.txt");
     console.log("We have " + GamesCompleted + " completed games");
-    res.render('splash.ejs', { playersOnline: gameStatus.playersOnline, gamesCompleted: GamesCompleted, playersWaiting: gameStatus.playersWaiting });
+    res.render('splash.ejs', { playersOnline: gameStatus.playersOnline, gamesCompleted: gameStatus.getGamesCompleted(), playersWaiting: gameStatus.playersWaiting });
 })
 
 /* Pressing the 'PLAY' button, returns this page */

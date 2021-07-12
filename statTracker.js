@@ -4,16 +4,13 @@ var gameStatus = {
     gamesInitialized: 0 /* number of games initialized */,
     gamesAborted: 0 /* number of games aborted */,
     playersOnline: 0 /*number of current players*/,
-    gamesCompleted: function() {
-      return fs.readFile('plays.txt', 'utf-8', (err, data) => {
-        if (err) {
-          console.error("gamesCompleted error: " + err);
-          return;
-        }
-        console.log("from statTracker.js: " + data);
-      })
+    playersWaiting: 0,
+    getGamesCompleted: function(){
+      return fs.readFileSync("plays.txt");
     },
-    playersWaiting: 0
+    increaseGamesCompleted: function(){
+      fs.writeFileSync("plays.txt", this.getGamesCompleted() + 1);
+    }
   };
   
   module.exports = gameStatus;

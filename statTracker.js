@@ -5,7 +5,13 @@ var gameStatus = {
     gamesAborted: 0 /* number of games aborted */,
     playersOnline: 0 /*number of current players*/,
     gamesCompleted: function() {
-      return fs.readFile('plays.txt', 'utf-8');
+      return fs.readFile('plays.txt', 'utf-8', (err, data) => {
+        if (err) {
+          console.error(err)
+          return
+        }
+        console.log(data)
+      })
     },
     playersWaiting: 0
   };

@@ -14,7 +14,7 @@ app.use(express.static(__dirname + "/public"));
 
 app.set('view engine', 'ejs')
 app.get('/', function(req, res) {
-    res.render('splash.ejs', { playersOnline: gameStatus.playersOnline, gamesCompleted: gameStatus.gamesCompleted, playersWaiting: gameStatus.playersWaiting });
+    res.render('splash.ejs', { playersOnline: gameStatus.playersOnline, gamesCompleted: gameStatus.gamesCompleted(), playersWaiting: gameStatus.playersWaiting });
 })
 
 /* Pressing the 'PLAY' button, returns this page */

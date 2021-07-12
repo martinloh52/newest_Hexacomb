@@ -18,12 +18,14 @@ app.set('view engine', 'ejs')
 app.get('/', function(req, res) {
 
     var GamesCompleted = function(){
+      let gamesCompleted = 0;
       fs.readFile('plays.txt', function read(err, data) {
         if (err) {
            throw err;
         }
-        return data
+        gamesCompleted = data;
       });
+      return gamesCompleted;
     }
     console.log("We have " + GamesCompleted() + " completed games");
     res.render('splash.ejs', { playersOnline: gameStatus.playersOnline, gamesCompleted: GamesCompleted(), playersWaiting: gameStatus.playersWaiting });

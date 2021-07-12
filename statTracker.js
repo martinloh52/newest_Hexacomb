@@ -10,7 +10,7 @@ var gameStatus = {
           console.error(err)
           return
         }
-        return data
+        return parseInt(data, 10)
       })
     },
     playersWaiting: 0

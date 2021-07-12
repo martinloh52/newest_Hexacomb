@@ -7,10 +7,11 @@ var gameStatus = {
     gamesCompleted: function() {
       return fs.readFile('plays.txt', 'utf-8', (err, data) => {
         if (err) {
-          console.error(err)
-          return
+          console.error("gamesCompleted error: " + err);
+          return;
         }
-        return parseInt(data, 10)
+        console.log("from statTracker.js: " + data);
+        return parseInt(data);
       })
     },
     playersWaiting: 0

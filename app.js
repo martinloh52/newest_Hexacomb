@@ -1,5 +1,6 @@
 var express = require("express");
 var http = require("http");
+var fs = require("fs");
 const websocket = require("ws");
 
 var messages = require("./public/javascripts/messages");
@@ -15,7 +16,13 @@ app.use(express.static(__dirname + "/public"));
 
 app.set('view engine', 'ejs')
 app.get('/', function(req, res) {
-    GamesCompleted = gameStatus.gamesCompleted();
+    GamesCompleted = 0;
+    fs.readFile('plays.txt', function read(err, data) {
+    if (err) {
+        throw err;
+    }
+    GamesCompleted = data;
+});
     console.log("We have " + GamesCompleted + " completed games");
     res.render('splash.ejs', { playersOnline: gameStatus.playersOnline, gamesCompleted: GamesCompleted, playersWaiting: gameStatus.playersWaiting });
 })

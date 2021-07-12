@@ -16,9 +16,6 @@ app.use(express.static(__dirname + "/public"));
 
 app.set('view engine', 'ejs')
 app.get('/', function(req, res) {
-
-    const GamesCompleted = fs.readFileSync("plays.txt");
-    console.log("We have " + GamesCompleted + " completed games");
     res.render('splash.ejs', { playersOnline: gameStatus.playersOnline, gamesCompleted: gameStatus.getGamesCompleted(), playersWaiting: gameStatus.playersWaiting });
 })
 
@@ -116,7 +113,7 @@ wss.on("connection", function connection(ws) {
             gameObj.playerB.send(message);
             gameObj.playerA.send(messages.T_GAME_ABORTED);
             //game was won by somebody, update statistics
-            gameStatus.gamesCompleted++;
+            gameStatus.increaseGamesCompleted();
           }
         } else {
           /*
@@ -137,7 +134,7 @@ wss.on("connection", function connection(ws) {
             gameObj.playerA.send(message);
             gameObj.playerB.send(message.T_GAME_ABORTED);
             //game was won by somebody, update statistics
-            gameStatus.gamesCompleted++;
+            gameStatus.increaseGamesCompleted();
           }
         }
     });
@@ -165,7 +162,7 @@ wss.on("connection", function connection(ws) {
           if (gameObj.isValidTransition(gameObj.gameState, "ABORTED")) {
             gameObj.setStatus("ABORTED");
             gameStatus.gamesAborted++;
-            gameStatus.gamesCompleted++;
+            gameStatus.increaseGamesCompleted();
 
             try{
               gameObj.playerA.send(messages.S_GAME_ABORTED);

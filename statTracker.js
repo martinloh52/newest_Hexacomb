@@ -12,7 +12,7 @@ var gameStatus = {
       return fs.readFileSync("plays.txt");
     },
     increaseGamesCompleted: function(){
-      fs.writeFileSync("plays.txt", this.getGamesCompleted() + 1);
+      fs.writeFileSync("plays.txt", parseInt(this.getGamesCompleted()) + 1);
     }
   };
   

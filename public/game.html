@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Game</title>
         <link rel="stylesheet" href="stylesheets/game.css">
     </head>
@@ -8,7 +9,8 @@
             <img id="logo" src="images/logo.png" alt="logo">
 
             <div class = "resize"><p>This page is best viewed on a wider screen.</p></div>
-            <div class = "entire-board">
+
+            <div class = "entire-board scale-me">
 
                 <div class = "game-background"></div>
                 <!--<div class = "black-bar one"></div>
@@ -161,15 +163,15 @@
                 </div>
             </div>
             <ul>
-                <li id="yellow">&emsp; &emsp; Player 1</li>
-                <li id="black">&emsp; &emsp; Player 2</li>
+                <li class = "scale-me" id="yellow">&emsp; &emsp; Player 1</li>
+                <li class = "scale-me" id="black">&emsp; &emsp; Player 2</li>
             </ul>
             <div id="matchTime">
                 <p class="text">Match Time:</p>
                 <p id="time"><span class = "minutes">0</span>:<span class="seconds">00</span></p>
             </div>
             <p id="statusBar">Waiting for an opponent to connect</p>
-            <svg class="res" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 114.6 99.25"><defs><style>.cls-1{fill:#eec33d;stroke:#eec33d;stroke-miterlimit:10;}</style></defs><title>rules_link</title><polygon class="cls-1" points="85.66 0.5 28.94 0.5 0.58 49.63 28.94 98.75 85.66 98.75 114.03 49.63 85.66 0.5"/>
+            <svg class="darkHover" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 114.6 99.25"><defs><style>.cls-1{fill:#eec33d;stroke:#eec33d;stroke-miterlimit:10;}</style></defs><title>rules_link</title><polygon class="cls-1" points="85.66 0.5 28.94 0.5 0.58 49.63 28.94 98.75 85.66 98.75 114.03 49.63 85.66 0.5"/>
                 <a href="/">
                     <path d="M 28 0
                             L 88 0
@@ -183,7 +185,8 @@
                             y="50"
                             fill="#FFFFFF"
                             text-anchor="middle"
-                            alignment-baseline="middle">
+                            alignment-baseline="middle"
+                            class = "resignText">
                             resign
                     </text>
             </svg>

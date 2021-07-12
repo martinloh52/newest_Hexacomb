@@ -45,13 +45,13 @@ body {
     grid-template-rows: 30% 30% 20% 20%;
 }
 
-.res:hover{
+.darkHover:hover{
     animation-name:darken;
     animation-duration: 1s;
     animation-fill-mode: forwards;
 }
 
-.res:not(:hover){
+.darkHover:not(:hover){
     animation: brighten 1s;
 }
 
@@ -76,7 +76,7 @@ body {
     to{filter: brightness(80%);}
 }
 
-.res {
+.darkHover {
     width: 122px;
     height: 104px;
     grid-column-start: 3;
@@ -86,11 +86,11 @@ body {
     margin-left: 71px;
 }
 
-.res path {
+.darkHover path {
     fill: transparent;
 }
 
-.res text {
+.darkHover text {
     font-family: honeycomb;
     font-size: 2em;
 }
@@ -228,6 +228,25 @@ p {
     z-index: 10;
 }
 
+.flashMe{
+    animation-name: flash;
+    animation-iteration-count: 6;
+    animation-direction: alternate;
+    animation-duration: 500ms;
+}
+
+.flashMeGreen{
+    animation-name:flashGreen;
+    animation-iteration-count: 6;
+    animation-direction: alternate;
+    animation-duration: 500ms;
+}
+
+.salmon{
+    fill: salmon;
+    stroke: salmon;
+}
+
 
 
 .black-bar {
@@ -238,12 +257,14 @@ p {
 	position: absolute;
 }
 
-.black-bar.one{
-    margin-left: 121px;
+@keyframes flash{
+    from{background-color:f9ecc2}
+    to{background-color:salmon}
 }
 
-.black-bar.two{
-    margin-left: 715px;
+@keyframes flashGreen{
+    from{background-color:f9ecc2}
+    to{background-color:greenyellow}
 }
 
 .entire-board{
@@ -268,11 +289,23 @@ p {
     color:black;
     font-size:1em;
 }
-@media only screen and (max-width: 800px){
+@media only screen and (max-width: 600px){
     .resize{
         display:block;
-        content: "<p>This page is best viewed on a wider screen.</p>";
+    }
+}
+
+@media only screen and (orientation:landscape) and (max-width:1000){
+    .scale-me{
+        zoom: .5;
+        -moz-transform: scale(.5);
     }
 
+    .resize{
+        display:none;
+    }
 
+    body{
+        font-size:10px;
+    }
 }

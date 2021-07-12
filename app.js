@@ -1,20 +1,25 @@
 var express = require("express");
 var http = require("http");
+var fs = require("fs");
 const websocket = require("ws");
 
 var messages = require("./public/javascripts/messages");
 
 var gameStatus = require("./statTracker");
 var Game = require("./game");
+const { gamesCompleted } = require("./statTracker");
 
-var port = process.argv[2];
+var port = process.env.PORT || 3000;
 var app = express();
 
 app.use(express.static(__dirname + "/public"));
 
 app.set('view engine', 'ejs')
 app.get('/', function(req, res) {
-    res.render('splash.ejs', { playersOnline: gameStatus.playersOnline, gamesCompleted: gameStatus.gamesCompleted, playersWaiting: gameStatus.playersWaiting });
+
+    const GamesCompleted = fs.readFileSync("plays.txt");
+    console.log("We have " + GamesCompleted + " completed games");
+    res.render('splash.ejs', { playersOnline: gameStatus.playersOnline, gamesCompleted: gameStatus.getGamesCompleted(), playersWaiting: gameStatus.playersWaiting });
 })
 
 /* Pressing the 'PLAY' button, returns this page */
@@ -54,7 +59,7 @@ wss.on("connection", function connection(ws) {
     con.id = connectionID++;
     let playerType = currentGame.addPlayer(con);
     websockets[con.id] = currentGame;
-    let waiting = true;
+    let waiting;
     gameStatus.playersOnline++;
 
     if(playerType == "B"){
@@ -66,6 +71,7 @@ wss.on("connection", function connection(ws) {
       gameStatus.playersWaiting = 0;
     }
     else{
+      waiting = true;
       gameStatus.playersWaiting = 1;
     }
 
@@ -147,6 +153,7 @@ wss.on("connection", function connection(ws) {
         if(waiting){
           gameStatus.playersWaiting = 0;
           waiting = false;
+          currentGame.removePlayerAFromLobby();
         }
     
         if (code == "1001") {

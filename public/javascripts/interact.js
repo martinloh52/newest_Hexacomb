@@ -1,5 +1,6 @@
 let clickSound = new Audio("../data/click.wav");
 let timer = null
+let HOST = location.origin.replace(/^http/, "ws");
 
 function GameState(socket, board, sb){
     this.playerType = null;  
@@ -82,6 +83,7 @@ function GameState(socket, board, sb){
                         stopTimer(timer);
                         //still gotta send the move to black, lol get rekt
                         this.toggleAll(false);
+                        changeResignButton();
                         var outgoingMsg = Messages.O_STONE_PLACED;
                         outgoingMsg.data = "A";
                         outgoingMsg.position = id;
@@ -127,6 +129,7 @@ function GameState(socket, board, sb){
                         stopTimer(timer);
                         //still gotta send the message to yellow, lol get rekt
                         this.toggleAll(false);
+                        changeResignButton();
                         var outgoingMsg = Messages.O_STONE_PLACED;
                         outgoingMsg.data = "B";
                         outgoingMsg.position = id;
@@ -207,19 +210,36 @@ function stopTimer(timer){
     clearInterval(timer);
 }
 
+function changeResignButton(){
+    let resign = document.querySelector(".resignText");
+    resign.innerHTML = "exit";
+    let polygon = document.querySelector(".cls-1");
+    polygon.classList.add("salmon");
+}
+
 function StatusBar() {
     this.setStatus = function(status) {
-      document.getElementById("statusBar").innerHTML = status;
+        let bar = document.getElementById("statusBar");
+        bar.innerHTML = status;
+        
+        if(status == Status["gameLost"] || status == Status["aborted"]){
+
+            bar.classList.add("flashMe");
+
+        }
+        else if(status == Status["gameWon"]){
+            bar.classList.add("flashMeGreen");
+        }
     };
 
     this.getStatus = function() {
         return document.getElementById("statusBar").innerHTML;
-    }
+    };
 }
 
 
 (function setup() {
-    var socket = new WebSocket("ws://localhost:3000");
+    var socket = new WebSocket(HOST);
 
     var sb = new StatusBar();
     let board = document.querySelector(".game-board-divs");
@@ -232,7 +252,9 @@ function StatusBar() {
 
         if(incomingMsg.type == Messages.T_GAME_ABORTED){
             stopTimer(timer);
+            changeResignButton();
             sb.setStatus(Status["aborted"]);
+            socket.close();
         }
 
         if(incomingMsg.type == Messages.T_BOTH_READY){
@@ -269,6 +291,7 @@ function StatusBar() {
 
         if (incomingMsg.type == Messages.T_GAME_WON_BY) {
             stopTimer(timer);
+            changeResignButton();
             gs.toggleAll(false);
             sb.setStatus(Status["gameLost"]);
         }

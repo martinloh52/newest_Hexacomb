@@ -6,6 +6,7 @@ var messages = require("./public/javascripts/messages");
 
 var gameStatus = require("./statTracker");
 var Game = require("./game");
+const { gamesCompleted } = require("./statTracker");
 
 var port = process.env.PORT || 3000;
 var app = express();
@@ -14,7 +15,9 @@ app.use(express.static(__dirname + "/public"));
 
 app.set('view engine', 'ejs')
 app.get('/', function(req, res) {
-    res.render('splash.ejs', { playersOnline: gameStatus.playersOnline, gamesCompleted: gameStatus.gamesCompleted(), playersWaiting: gameStatus.playersWaiting });
+    GamesCompleted = gameStatus.gamesCompleted();
+    console.log("We have " + GamesCompleted + " completed games");
+    res.render('splash.ejs', { playersOnline: gameStatus.playersOnline, gamesCompleted: GamesCompleted, playersWaiting: gameStatus.playersWaiting });
 })
 
 /* Pressing the 'PLAY' button, returns this page */

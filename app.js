@@ -23,6 +23,7 @@ app.get('/', function(req, res) {
         if (err) {
            throw err;
         }
+        console.log(data);
         gamesCompleted = data;
       });
       return gamesCompleted;

@@ -11,19 +11,7 @@ var gameStatus = {
     },
     increaseGamesCompleted: function(){
       fs.writeFileSync("plays.txt", String(parseInt(this.getGamesCompleted()) + 1));
-
-      const USER = process.env.GITHUB_USERNAME;
-      const PASS = process.env.GITHUB_USERNAME;
-      const REPO = process.env.GITHUB_REPO;
-
-      const git = require('simple-git');
-      const remote = `https://${USER}:${PASS}@${REPO}`;
-
-      await git().silent(true)
-        .add("plays.txt")
-        .commit("heeheehoohoo, here i go committing the statistics again")
-        .push(remote, 'origin/master');
-      }
+    }
   };
   
   module.exports = gameStatus;

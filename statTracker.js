@@ -1,5 +1,5 @@
 const fs = require('fs');
-const PLAYS_FILE = "stats/plays.txt";
+const PLAYS_FILE = "plays.txt";
 
 var gameStatus = {
     since: Date.now() /* since we keep it simple and in-memory, keep track of when this object was created */,
